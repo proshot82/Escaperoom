@@ -1078,7 +1078,7 @@ function mkHat(fire){const k=kit(),c=0x53483e;
   k.cyl(M.fabric,.111,.113,.034,{p:[0,.055,0],c:0x1d1a17},26);k.box(M.fabric,.022,.04,.05,{p:[.112,.055,0],c:0x1d1a17},.008);
   k.cyl(M.fabric,.168,.168,.004,{p:[0,-.002,0],c:0x7a2a22},26);k.cyl(M.fabric,.1,.1,.006,{p:[0,-.004,0],c:0x2a1c16},22);
   const g=k.build();
-  const tag=signMesh(.11,.07,DRAW.tag('ШЛЯПА КАЗЁННАЯ инв. № 13\nНА ВОРЕ — ГОРИТ'),{px:150});tag.rotation.x=PI/2;tag.position.set(0,-.009,0);g.add(tag);
+  const tag=signMesh(.11,.07,DRAW.tag('ШЛЯПА КАЗЁННАЯ инв. № 13\nОГНЕОПАСНА ПРИ ХИЩЕНИЯХ'),{px:150});tag.rotation.x=PI/2;tag.position.set(0,-.009,0);g.add(tag);
   if(fire){const f=mkFlames(5,.15);f.position.y=.13;g.add(f);g.userData.flames=f}
   g.rotation.z=.06;const o=new T.Group();o.add(g);return o}
 
@@ -1101,7 +1101,7 @@ function mkFlask(light){const k=kit();const prof=[[.001,0],[.045,.004],[.074,.03
 
 function mkKey(){const k=kit();k.torus(M.brass,.032,.009,{p:[0,0,0],r:[0,0,0]},8,18);k.torus(M.brass,.014,.005,{p:[0,0,0]},6,12);k.cyl(M.brass,.008,.008,.13,{p:[.097,0,0],r:[0,0,PI/2]},10);k.cyl(M.brass,.012,.012,.012,{p:[.04,0,0],r:[0,0,PI/2]},10);
   k.box(M.brass,.012,.04,.008,{p:[.15,-.022,0]},.002);k.box(M.brass,.012,.028,.008,{p:[.128,-.016,0]},.002);k.box(M.brass,.016,.012,.008,{p:[.139,-.036,0]},.002);
-  const g=k.build();const tag=signMesh(.09,.045,DRAW.tag('ШКАФ. Не открывать: там скелет'),{px:120});tag.material.side=T.DoubleSide;tag.position.set(-.07,-.035,.004);tag.rotation.z=.5;g.add(tag);return g}
+  const g=k.build();const tag=signMesh(.09,.045,DRAW.tag('инв. № 13‑Ш'),{px:120});tag.material.side=T.DoubleSide;tag.position.set(-.07,-.035,.004);tag.rotation.z=.5;g.add(tag);return g}
 
 function mkSwallow(scarf){const k=kit(),D=0x1b2646,Wh=0xf2efe2;
   k.sph(M.shell,.05,{p:[0,0,0],s:[.82,.8,1.4],c:D});k.sph(M.matte,.042,{p:[0,-.014,.006],s:[.8,.7,1.25],c:Wh});k.sph(M.shell,.036,{p:[0,.034,.06],c:D});k.sph(M.matte,.022,{p:[0,.016,.078],s:[1,.8,.8],c:0xb3402a});
@@ -1181,6 +1181,17 @@ function card(text,w,h,style){ // настольная табличка-«дом
   const b=new T.Mesh(rbox(w,h,.006,.002),M.paper);b.rotation.x=.42;b.position.set(0,h/2*Math.cos(.42),-h*Math.sin(.42));g.add(b);b.castShadow=true;return g}
 function poster(wall,a,y,w,h,draw,tilt){const g=new T.Group(),s=signMesh(w,h,draw,{px:300,rough:.9});g.add(s);const k=kit();for(const[px,py]of[[-1,1],[1,1],[-1,-1],[1,-1]])k.cyl(M.chrome,.008,.008,.006,{p:[px*(w/2-.025),py*(h/2-.025),.003],r:[PI/2,0,0]},8);g.add(k.build({cast:false}));
   onWall(g,wall,a,y,.006);g.rotation.z=tilt||0;return g}
+// запрещающий знак с картинкой: что именно запрещено — видно, а не написано
+function noSign(art,o){o=o||{};return(x,Wd,H)=>{x.fillStyle=o.bg||'#f4f0e2';x.fillRect(0,0,Wd,H);x.strokeStyle='#2a2118';x.lineWidth=Math.max(3,H*.03);x.strokeRect(H*.05,H*.05,Wd-H*.1,H-H*.1);
+  const cx=o.text?H*.5:Wd/2,cy=H*.5,r=H*.37;x.save();x.translate(cx,cy);art(x,r);x.restore();x.strokeStyle='#c8281e';x.lineWidth=r*.15;x.lineCap='butt';x.beginPath();x.arc(cx,cy,r,0,TAU);x.stroke();x.beginPath();x.moveTo(cx-r*.7,cy-r*.7);x.lineTo(cx+r*.7,cy+r*.7);x.stroke();
+  if(o.text)fitText(x,o.text,H*1.0,H*.12,Wd-H*1.12,H*.76,{size:H*.3,font:F_HEAD,color:'#c8281e',weight:'normal'});grainCanvas(x,Wd,H,12)}}
+const ART={
+  lamp:(x,r)=>{x.fillStyle='#2f6a52';x.beginPath();x.moveTo(-r*.2,-r*.72);x.lineTo(r*.2,-r*.72);x.lineTo(r*.5,-r*.32);x.lineTo(-r*.5,-r*.32);x.fill();x.fillStyle='#e8a820';for(const y of[-.16,.04]){x.beginPath();x.ellipse(0,r*y,r*.06,r*.1,0,0,TAU);x.fill()}
+    x.strokeStyle='#2a2118';x.lineWidth=r*.07;x.beginPath();x.arc(0,r*.47,r*.24,-1.2,PI+1.2);x.stroke();x.beginPath();x.moveTo(-r*.09,r*.25);x.lineTo(-r*.09,r*.12);x.moveTo(r*.09,r*.25);x.lineTo(r*.09,r*.12);x.stroke()},
+  cat:(x,r)=>{x.fillStyle='#17171c';x.beginPath();x.ellipse(-r*.15,-r*.05,r*.22,r*.3,0,0,TAU);x.fill();x.beginPath();x.arc(-r*.15,-r*.45,r*.17,0,TAU);x.fill();for(const s of[-1,1]){x.beginPath();x.moveTo(-r*.15+s*r*.17,-r*.5);x.lineTo(-r*.15+s*r*.12,-r*.74);x.lineTo(-r*.15+s*r*.02,-r*.58);x.fill()}
+    x.strokeStyle='#17171c';x.lineWidth=r*.09;x.lineCap='round';x.beginPath();x.moveTo(-r*.1,r*.2);x.quadraticCurveTo(r*.05,r*.62,r*.4,r*.46);x.stroke();x.fillStyle='#e8b89a';x.beginPath();x.arc(r*.48,r*.43,r*.13,0,TAU);x.fill();x.fillRect(r*.5,r*.35,r*.32,r*.16)},
+};
+function brassBg(x,Wd,H){const g=x.createLinearGradient(0,0,Wd,H);g.addColorStop(0,'#d9b45a');g.addColorStop(.5,'#f0d488');g.addColorStop(1,'#b08a35');x.fillStyle=g;x.fillRect(0,0,Wd,H);x.strokeStyle='#6b4d14';x.lineWidth=Math.max(3,H*.04);x.strokeRect(H*.07,H*.07,Wd-H*.14,H-H*.14)}
 // рисовалка плакатов «агитпроп»
 function agit(o){return(x,Wd,H)=>{x.fillStyle=o.bg||'#e9dfc0';x.fillRect(0,0,Wd,H);x.fillStyle=o.band||'#b3261e';x.fillRect(0,0,Wd,H*.2);x.fillRect(0,H*.86,Wd,H*.14);
   fitText(x,o.title,Wd*.05,H*.015,Wd*.9,H*.17,{size:H*.11,font:F_HEAD,color:o.tc||'#fff3d0',weight:'normal'});
@@ -1219,8 +1230,8 @@ function buildDoor(){const RZ=ROOM.z,DX0=W.doorX[0],DX1=W.doorX[1],DH=W.doorX[2]
   const num=signMesh(.2,.13,(x,Wd,H)=>{x.clearRect(0,0,Wd,H);x.fillStyle='#f4f0e2';x.beginPath();x.ellipse(Wd/2,H/2,Wd/2-3,H/2-3,0,0,TAU);x.fill();x.strokeStyle='#1f3f7a';x.lineWidth=5;x.stroke();fitText(x,'13',Wd*.2,H*.12,Wd*.6,H*.76,{size:H*.7,font:F_HEAD,color:'#1f3f7a',weight:'normal'})},{px:120,rough:.3,alpha:true});num.position.set(-dw/2,2.02,.056);piv.add(num);
   const pl=signMesh(.62,.25,DRAW.plaque('ДВЕРЬ ОТКРОЕТСЯ,\nКОГДА РАК НА ГОРЕ СВИСТНЕТ\n— завлаб Б. К. Вальный'),{px:150,metal:.75,rough:.38});pl.position.set(-dw/2,1.62,.058);piv.add(pl);
   const ev=signMesh(.42,.36,(x,Wd,H)=>{x.fillStyle='#f4f0e2';x.fillRect(0,0,Wd,H);x.fillStyle='#1f7a3f';x.fillRect(0,0,Wd,H*.2);fitText(x,'ПЛАН ЭВАКУАЦИИ',Wd*.04,0,Wd*.92,H*.2,{size:H*.14,font:F_HEAD,color:'#fff',weight:'normal'});
-    fitText(x,'1. Рак.\n2. Гора.\n3. Свист.\n4. Не толпиться.',Wd*.06,H*.24,Wd*.44,H*.62,{size:H*.11,font:F_SANS,color:'#1a1a1a',align:'left'});
-    x.save();x.translate(Wd*.72,H*.78);const u=H*.01;x.fillStyle='#8a5a36';x.fillRect(-u*14,0,u*28,u*5);x.fillStyle='#7a7f8c';x.beginPath();x.moveTo(-u*13,0);x.lineTo(-u*2,-u*30);x.lineTo(u*2,-u*30);x.lineTo(u*13,0);x.fill();x.fillStyle='#f2f8ff';x.beginPath();x.moveTo(-u*5.5,-u*22);x.lineTo(-u*2,-u*30);x.lineTo(u*2,-u*30);x.lineTo(u*5.5,-u*22);x.lineTo(u*2,-u*24);x.lineTo(0,-u*21);x.lineTo(-u*2,-u*24);x.fill();
+    
+    x.save();x.translate(Wd*.52,H*.82);const u=H*.0125;x.fillStyle='#8a5a36';x.fillRect(-u*14,0,u*28,u*5);x.fillStyle='#7a7f8c';x.beginPath();x.moveTo(-u*13,0);x.lineTo(-u*2,-u*30);x.lineTo(u*2,-u*30);x.lineTo(u*13,0);x.fill();x.fillStyle='#f2f8ff';x.beginPath();x.moveTo(-u*5.5,-u*22);x.lineTo(-u*2,-u*30);x.lineTo(u*2,-u*30);x.lineTo(u*5.5,-u*22);x.lineTo(u*2,-u*24);x.lineTo(0,-u*21);x.lineTo(-u*2,-u*24);x.fill();
     x.fillStyle='#c9402a';x.beginPath();x.ellipse(0,-u*34,u*6,u*4,0,0,TAU);x.fill();for(const sx of[-1,1]){x.beginPath();x.ellipse(sx*u*9,-u*39,u*3,u*2,sx*.6,0,TAU);x.fill();x.strokeStyle='#c9402a';x.lineWidth=u*1.2;x.beginPath();x.moveTo(sx*u*4,-u*35);x.lineTo(sx*u*8,-u*38);x.stroke()}
     x.fillStyle='#d9b45a';x.fillRect(u*5,-u*36,u*5,u*2.4);x.fillStyle='#1a1a1a';x.font='bold '+u*9+'px '+F_SERIF;x.textAlign='center';x.fillText('♪',u*17,-u*40);x.fillText('♫',u*13,-u*50);
     x.strokeStyle='#1f7a3f';x.lineWidth=u*1.6;x.beginPath();x.moveTo(-u*20,-u*14);x.lineTo(-u*28,-u*14);x.moveTo(-u*25,-u*17);x.lineTo(-u*28,-u*14);x.lineTo(-u*25,-u*11);x.stroke();x.restore();fitText(x,'Утв.: завлаб Б. К. Вальный',Wd*.05,H*.87,Wd*.9,H*.1,{size:H*.06,font:F_SERIF,color:'#555',weight:'normal'});grainCanvas(x,Wd,H,12)},{px:240});ev.position.set(-dw/2,1.18,.058);ev.rotation.z=-.03;piv.add(ev);
@@ -1240,7 +1251,7 @@ function buildDoor(){const RZ=ROOM.z,DX0=W.doorX[0],DX1=W.doorX[1],DH=W.doorX[2]
   // тумба «место для горы»
   const pd=new T.Group(),p=kit();p.box(M.woodRed,.46,.06,.46,{p:[0,.03,0]},.015);p.lathe(M.woodRed,[[.17,.06],[.19,.09],[.15,.14],[.11,.24],[.1,.45],[.12,.62],[.15,.72],[.19,.76],[.17,.8]],{},20);p.box(M.woodRed,.44,.05,.44,{p:[0,.825,0]},.015);
   p.torus(M.brass,.165,.007,{p:[0,.852,0],r:[PI/2,0,0]},6,28);pd.add(p.build());
-  const pp=signMesh(.3,.09,DRAW.plaque('МЕСТО ДЛЯ ГОРЫ (1 шт.)',{font:F_SANS}),{px:90,metal:.7,rough:.4});pp.position.set(0,.6,.125);pp.rotation.x=-.12;pd.add(pp);
+  const pp=signMesh(.3,.09,(x,Wd,H)=>{brassBg(x,Wd,H);x.fillStyle='#3a2706';x.strokeStyle='#3a2706';x.lineWidth=3;x.lineJoin='round';const cx=Wd*.4,by=H*.82;x.beginPath();x.moveTo(cx-H*.75,by);x.lineTo(cx-H*.1,H*.16);x.lineTo(cx+H*.12,H*.16);x.lineTo(cx+H*.75,by);x.closePath();x.stroke();x.beginPath();x.moveTo(cx-H*.3,H*.42);x.lineTo(cx-H*.1,H*.16);x.lineTo(cx+H*.12,H*.16);x.lineTo(cx+H*.32,H*.42);x.lineTo(cx+H*.1,H*.34);x.lineTo(cx,H*.46);x.lineTo(cx-H*.12,H*.34);x.closePath();x.fill();fitText(x,'× 1',Wd*.66,H*.15,Wd*.26,H*.7,{size:H*.5,font:F_SERIF,color:'#3a2706'});grainCanvas(x,Wd,H,14)},{px:90,metal:.7,rough:.4});pp.position.set(0,.6,.125);pp.rotation.x=-.12;pd.add(pp);
   pd.position.set(1.5,0,-3.0);world.add(pd);W.pedestal=pd;W.pedTop=V3(1.5,.85,-3.0);coll(1.5,-3.0,.52,.52);blob(1.5,-3.0,.9,.9,.75);reg('pedestal',pd,{name:'Тумба у двери',range:3});proxy(pd,.5,.9,.5,[0,.45,0]);
   // выключатель
   const sw=new T.Group(),s=kit();s.box(M.bakelite,.09,.09,.025,{p:[0,0,.012]},.012);sw.add(s.build());const tg=new T.Mesh(rbox(.022,.04,.03,.006),M.paint.clone());tg.material.vertexColors=false;tg.material.color=C(0xe8e2cc);tg.position.set(0,0,.03);tg.rotation.x=.4;sw.add(tg);W.switchTog=tg;
@@ -1249,6 +1260,7 @@ function buildDoor(){const RZ=ROOM.z,DX0=W.doorX[0],DX1=W.doorX[1],DH=W.doorX[2]
 
 function buildBust(){const g=new T.Group(),k=kit(),P=M.plaster;
   k.box(M.plaster,.46,.08,.46,{p:[0,.04,0],c:0xcfc8b4},.012);k.box(M.plaster,.33,.86,.33,{p:[0,.5,0],c:0xd8d0bc},.02);k.box(M.plaster,.42,.07,.42,{p:[0,.965,0],c:0xcfc8b4},.015);k.box(M.plaster,.36,.04,.36,{p:[0,1.02,0],c:0xd8d0bc},.01);
+  k.cyl(M.woodRed,.012,.015,.1,{p:[.07,.094,.2],r:[0,.25,PI/2]},8);k.box(M.chrome,.09,.006,.018,{p:[-.02,.09,.212],r:[0,.25,0]},.002);for(let i=0;i<9;i++)k.add(wonk(new T.IcosahedronGeometry(rr(.006,.014),0),.003,40,i),M.plaster,{p:[rr(-.2,.2),i<5?.086:.006,i<5?rr(.18,.215):rr(.26,.42)]});
   // плечи, шея, голова
   k.add(wonk(new T.SphereGeometry(.2,20,14),.008,9,1),P,{p:[0,1.1,0],s:[1.25,.62,.72]});k.box(P,.3,.1,.2,{p:[0,1.07,0]},.04);k.cyl(P,.06,.075,.11,{p:[0,1.24,0]},14);
   k.add(wonk(new T.SphereGeometry(.135,22,18),.005,11,4),P,{p:[0,1.42,0],s:[.95,1.1,1]});
@@ -1266,7 +1278,7 @@ function buildBust(){const g=new T.Group(),k=kit(),P=M.plaster;
   for(const s of[-1,1])n.sph(P,.022,{p:[s*.026,-.016,NL-.01]});
   const zs=[.04,.056,.098,.114,.13,.146,.188,.23,.246,.262];for(const z of zs){const r=lerp(r0,r1,z/NL);n.box(M.matte,r*1.5,.016,.007,{p:[0,r-.004,z],c:0x2a2520},.002);n.box(M.matte,r*1.2,.006,.011,{p:[0,r+.001,z],c:0x8a8272},.002)}
   nose.add(n.build());nose.position.set(0,1.435,.118);nose.rotation.x=.13;g.add(nose);W.nose=nose;
-  const pl=signMesh(.27,.2,DRAW.plaque('АКАДЕМИК\nИ. И. БУКВОЕДОВ\n«Всё важное я зарубил себе на носу»'),{px:170,metal:.7,rough:.4});pl.position.set(0,.62,.167);g.add(pl);
+  const pl=signMesh(.27,.2,DRAW.plaque('АКАДЕМИК\nИ. И. БУКВОЕДОВ\n1889 – 1974'),{px:170,metal:.7,rough:.4});pl.position.set(0,.62,.167);g.add(pl);
   g.position.set(-1.0,0,-2.98);world.add(g);W.bust=g;coll(-1.0,-2.98,.5,.5);blob(-1.0,-2.98,.9,.9,.8);
   reg('bust',g,{name:'Бюст академика Буквоедова',closeup:{pos:[-.47,1.74,-2.3],look:[-1.0,1.44,-2.7]}});
   reg('nose',nose,{name:'Нос академика',parent:'bust'});proxy(nose,.14,.14,.4,[0,0,.16]);
@@ -1279,8 +1291,9 @@ function buildRack(){const g=new T.Group(),k=kit(),c=0x5a3a26;
   // зонт
   k.cyl(M.rubber,.02,.012,.75,{p:[.14,.42,-.08],r:[.08,0,-.14]},10);k.tube(M.wood,[[.2,.8,-.11],[.21,.87,-.115],[.25,.89,-.12],[.27,.85,-.12]],.01,{c:0x8a5a36},10,6);
   g.add(k.build());g.position.set(3.95,0,-2.95);world.add(g);coll(3.95,-2.95,.45,.45);blob(3.95,-2.95,.8,.8,.7);W.rack=g;reg('rack',g,{name:'Вешалка'});
-  const hat=mkHat(false);hat.position.set(3.95,1.795,-2.95);hat.rotation.set(.1,.6,.22);world.add(hat);W.hat=hat;reg('hat',hat,{name:'Шляпа завлаба'});proxy(hat,.44,.26,.44,[0,.08,0]);POS.hat=hat.position.clone();
-  const s=signMesh(.34,.17,DRAW.enamel('ШЛЯПУ ЗАВЛАБА НЕ ТРОГАТЬ!\nВ ней дело.','#1f4f8f','#fff',{font:F_SANS}),{px:150,rough:.35});onWall(s,'N',3.95,1.28,.008);s.rotation.z=.03;
+  const hat=mkHat(false);const peek=new T.Group();{const pk=kit();pk.box(M.paper,.2,.014,.2,{p:[0,0,0],c:0x0b0b0d},.004);pk.box(M.paper,.19,.008,.19,{p:[.004,.0,.004],c:0x16161a},.002);for(const sx of[-.05,.05]){pk.box(M.fabric,.012,.003,.09,{p:[sx,-.004,.13],r:[.5,sx*3,0],c:0xe8dcbc},.001);pk.box(M.fabric,.012,.003,.07,{p:[sx*1.3,-.05,.18],r:[1.3,sx*4,0],c:0xe8dcbc},.001)}peek.add(pk.build())}peek.position.set(-.03,-.012,.2);peek.rotation.set(.18,.25,.05);hat.add(peek);W.hatPeek=peek;hat.position.set(3.95,1.795,-2.95);hat.rotation.set(.1,.6,.22);world.add(hat);W.hat=hat;reg('hat',hat,{name:'Шляпа завлаба'});proxy(hat,.44,.26,.44,[0,.08,0]);POS.hat=hat.position.clone();
+  const s=signMesh(.34,.17,DRAW.enamel('ШЛЯПУ ЗАВЛАБА\nНЕ ТРОГАТЬ!','#1f4f8f','#fff',{font:F_SANS}),{px:150,rough:.35});onWall(s,'N',3.95,1.28,.008);s.rotation.z=.03;
+  {const soot=new T.Mesh(new T.PlaneGeometry(.95,1.1),aoMatRad.clone());soot.material.opacity=.5;onWall(soot,'N',3.98,2.35,.004)}
   // калоша
   const ga=new T.Group(),q=kit();q.sph(M.rubber,.1,{p:[0,.062,0],s:[1,.62,2.2]},16,12);q.box(M.rubber,.19,.02,.44,{p:[0,.012,0]},.01);q.cyl(M.matte,.072,.066,.05,{p:[0,.1,-.07],s:[1,1,1.35],c:0xa0281e},16);q.cyl(M.rubber,.06,.06,.012,{p:[0,.127,-.07],s:[1,1,1.35]},16);
   ga.add(q.build());const gc=card('КАЛОША. Садиться не рекомендуется',.2,.07);gc.position.set(.2,0,.16);gc.rotation.y=-.5;ga.add(gc);
@@ -1314,15 +1327,18 @@ function buildDesk(){const D=new T.Group(),k=kit(),X=2.2,Z=.2,TY=.79;
   const puddle=new T.Mesh(new T.CircleGeometry(.07,18),new T.MeshBasicMaterial({color:new T.Color(3,2.2,.8),transparent:true,opacity:.85}));puddle.rotation.x=-PI/2;puddle.position.set(-.31,.004,.3);puddle.scale.set(1.3,1,1);L.add(puddle);
   ANIM.push((t,dt)=>{for(const d of drops){d.userData.t+=dt*.75;const q=d.userData.t%1.35;const y=.36-q*q*1.6;d.visible=y>.01;d.position.set(-.31,Math.max(y,.01),.3);d.scale.set(1,1+q*1.6,1)}puddle.scale.set(1.3+.12*Math.sin(t*3),1.3+.12*Math.sin(t*3),1)});
   L.position.set(X+.2,TY,Z-.5);world.add(L);W.lamp={g:L,shade:sh,bulbMat,inMat,puddle};reg('lamp',L,{name:'Настольная лампа'});proxy(L,.5,.6,.5,[-.12,.3,.1]);POS.lamp=V3(X+.05,TY+.4,Z-.4);
-  const lc=card('ЛАМПА ЛЬЁТ СВЕТ.\nТару не подставлять!',.2,.085);lc.position.set(X-.12,TY,Z-.72);lc.rotation.y=-PI/2+.5;world.add(lc);reg('lampCard',lc,{name:'Табличка у лампы'});
+  const lc=card('',.16,.11,noSign(ART.lamp,{bg:'#f2e2a0'}));lc.position.set(X-.12,TY,Z-.72);lc.rotation.y=-PI/2+.5;world.add(lc);reg('lampCard',lc,{name:'Табличка у лампы'});
   const sp=LIGHTS.lamp;sp.position.set(X,TY+.46,Z-.32);sp.target.position.set(.9,0,.9);
   // казённый карандаш на подушечке
   const ps=new T.Group(),p=kit();p.box(M.woodRed,.27,.03,.12,{p:[0,.015,0]},.008);p.box(M.fabric,.23,.03,.085,{p:[0,.042,0],c:0x8a1f2a},.012);for(const sx of[-1,1])p.sph(M.brass,.012,{p:[sx*.12,.036,.05]});ps.add(p.build());
-  const pc=card('КАЗЁННЫЙ КАРАНДАШ.\nНЕ ВОРОВАТЬ!\nНа воре и шапка горит.',.2,.1,DRAW.enamel('КАЗЁННЫЙ КАРАНДАШ.\nНЕ ВОРОВАТЬ!\nНа воре и шапка горит.','#b3261e','#fff3d0',{font:F_SANS}));pc.position.set(0,0,-.13);ps.add(pc);
+  const pc=card('',.2,.1,DRAW.enamel('КАЗЁННЫЙ КАРАНДАШ.\nНЕ ВОРОВАТЬ!','#b3261e','#fff3d0',{font:F_SANS}));pc.position.set(0,0,-.13);ps.add(pc);
   ps.position.set(X-.2,TY,Z-.2);ps.rotation.y=-PI/2;world.add(ps);W.pencilStand=ps;reg('pencilStand',ps,{name:'Подставка казённого карандаша'});
   const pen=mkPencil();pen.position.set(X-.2,TY+.068,Z-.2);pen.rotation.y=-PI/2+.06;world.add(pen);W.pencil=pen;reg('pencil',pen,{name:'Казённый карандаш'});proxy(pen,.28,.07,.1,[0,0,0]);POS.pencil=pen.position.clone();
   // записка завлаба
-  const note=signMesh(.2,.15,DRAW.note('Куда я дел дело?..\nА! Дело в шляпе.\nКак всегда.  — Б. К.'),{px:200});note.rotation.x=-PI/2;note.rotation.z=PI/2+.25;note.position.set(X+.12,TY+.006,Z-.03);world.add(note);W.note=note;reg('note',note,{name:'Записка завлаба'});
+  const note=signMesh(.2,.15,(x,Wd,H)=>{x.fillStyle='#f1e6b8';x.fillRect(0,0,Wd,H);x.strokeStyle='rgba(60,90,160,.25)';x.lineWidth=1;for(let y=H*.18;y<H;y+=H*.12){x.beginPath();x.moveTo(0,y);x.lineTo(Wd,y);x.stroke()}
+    x.strokeStyle='#1f2f7a';x.fillStyle='#1f2f7a';x.lineWidth=4;x.lineJoin='round';x.lineCap='round';const cx=Wd*.36,cy=H*.66;x.save();x.translate(cx-Wd*.2,cy-H*.3);x.rotate(-.5);x.strokeRect(-Wd*.09,-H*.13,Wd*.18,H*.26);x.font='bold '+H*.085+'px '+F_HAND;x.textAlign='center';x.fillText('ДЕЛО',0,H*.02);x.restore();
+    x.fillStyle='#f1e6b8';x.beginPath();x.ellipse(cx,cy,Wd*.27,H*.09,0,0,TAU);x.fill();x.stroke();x.beginPath();x.moveTo(cx-Wd*.15,cy-H*.02);x.bezierCurveTo(cx-Wd*.15,cy-H*.36,cx+Wd*.15,cy-H*.36,cx+Wd*.15,cy-H*.02);x.fill();x.stroke();x.beginPath();x.moveTo(cx-Wd*.15,cy-H*.08);x.lineTo(cx+Wd*.15,cy-H*.08);x.stroke();
+    fitText(x,'НЕ ЗАБЫТЬ!!',Wd*.6,H*.1,Wd*.36,H*.5,{size:H*.16,font:F_HAND,color:'#b3261e'});fitText(x,'— Б. К.',Wd*.62,H*.7,Wd*.32,H*.2,{size:H*.11,font:F_HAND,color:'#1f2f7a'});grainCanvas(x,Wd,H,10)},{px:260});note.rotation.x=-PI/2;note.rotation.z=PI/2+.25;note.position.set(X+.12,TY+.006,Z-.03);world.add(note);W.note=note;reg('note',note,{name:'Записка завлаба',closeup:{pos:[X+.36,TY+.42,Z-.03],look:[X+.12,TY,Z-.03]}});
   const n2=new T.Mesh(new T.BoxGeometry(.24,.05,.19),PROXYMAT);n2.userData.proxy=true;n2.userData.inter='note';n2.position.copy(note.position);world.add(n2);W.noteProxy=n2;
   // пишущая машинка
   const tw=new T.Group(),t=kit(),tc=0x2f4f4a;t.box(M.enamel,.36,.07,.32,{p:[0,.035,0],c:tc},.02);t.box(M.enamel,.34,.07,.14,{p:[0,.09,-.09],c:tc},.025);t.box(M.rubber,.3,.012,.1,{p:[0,.13,-.09]},.004);
@@ -1427,7 +1443,7 @@ function buildBench(){const B=new T.Group(),k=kit(),BX=-4.1,BZ=.2,TY=.9,fc=0x6f8
   ket.add(e.build());ket.position.y=.208;K.add(ket);
   const wh=mkWhistle();wh.position.set(.2,.408,0);wh.rotation.z=-.42;K.add(wh);W.whistle=wh;
   const fm=mkFlames(1,.085);fm.position.set(0,.105,0);fm.visible=false;K.add(fm);
-  const kcard=card('СПИЧКИ ИЗЪЯТЫ ПОЖАРНОЙ ОХРАНОЙ.\nОгонь добывайте по поговорке.',.24,.075);kcard.position.set(.24,0,-.2);kcard.rotation.y=PI/2-.2;K.add(kcard);
+  const kcard=card('СПИЧКИ ИЗЪЯТЫ\nПОЖАРНОЙ ОХРАНОЙ',.2,.075);kcard.position.set(.24,0,-.2);kcard.rotation.y=PI/2-.2;K.add(kcard);
   K.position.set(kx,TY,kz);world.add(K);W.kettle={g:K,ket,flame:fm,pos:V3(kx,TY+.3,kz)};POS.kettle=V3(kx,TY+.3,kz);reg('burner',K,{name:'Чайник на спиртовке'});proxy(K,.4,.5,.4,[.04,.25,0]);reg('whistleK',wh,{name:'Свисток чайника'});
   LIGHTS.flame.position.set(kx+.3,TY+.2,kz);
   // --- счёты ---
@@ -1517,13 +1533,14 @@ function buildSafe(){const SX=-3.85,SZ=3.02,G=new T.Group(),k=kit(),sc=0x35504a;
     dg.position.set(-dw/2+.126-i*.084,.16,-.078);door.add(dg);W.dials.push({g:dg,face,v:0});reg('dial'+i,dg,{name:'Барабан кода № '+(i+1),parent:'safe'})}
   const wheel=new T.Group(),wk=kit();wk.torus(M.chrome,.085,.012,{},8,26);for(let i=0;i<3;i++){const a=i/3*TAU;wk.cyl(M.chrome,.008,.008,.17,{p:[0,0,0],r:[0,0,a]},6)}wk.cyl(M.iron,.03,.03,.04,{p:[0,0,.01],r:[PI/2,0,0]},12);wk.sph(M.brass,.02,{p:[0,0,-.018]});wheel.add(wk.build());wheel.position.set(-dw/2,-.07,-.085);door.add(wheel);
   reg('safeHandle',wheel,{name:'Штурвал сейфа',parent:'safe'});proxy(wheel,.22,.22,.06,[0,0,0]);
-  const pq=signMesh(.44,.085,DRAW.plaque('КОД ЗАБЫЛ? ЗАРУБИ СЕБЕ НА НОСУ! — завлаб',{font:F_SANS}),{px:70,metal:.7,rough:.4});pq.rotation.y=PI;pq.position.set(-dw/2,-.225,-.0665);door.add(pq);
+  const pq=signMesh(.44,.085,(x,Wd,H)=>{brassBg(x,Wd,H);x.fillStyle='#3a2706';x.strokeStyle='#3a2706';const cy=H*.54;x.beginPath();x.arc(H*.62,cy,H*.28,0,TAU);x.fill();x.beginPath();x.moveTo(H*.8,cy-H*.14);x.lineTo(Wd*.5,cy+H*.04);x.lineTo(H*.8,cy+H*.14);x.fill();x.lineWidth=2;for(let i=0;i<8;i++){const tx=lerp(H*1.0,Wd*.46,i/7);x.beginPath();x.moveTo(tx,cy-H*.24);x.lineTo(tx,cy-H*.06+i*H*.012);x.stroke()}
+    x.lineWidth=4;x.beginPath();x.moveTo(Wd*.55,cy);x.lineTo(Wd*.65,cy);x.moveTo(Wd*.625,cy-H*.13);x.lineTo(Wd*.65,cy);x.lineTo(Wd*.625,cy+H*.13);x.stroke();x.lineWidth=3;for(let i=0;i<4;i++)x.strokeRect(Wd*.69+i*Wd*.065,cy-H*.22,Wd*.05,H*.44);grainCanvas(x,Wd,H,14)},{px:70,metal:.7,rough:.4});pq.rotation.y=PI;pq.position.set(-dw/2,-.225,-.0665);door.add(pq);
   door.position.set(w/2-.005,Y,-d/2);G.add(door);
   G.position.set(SX,0,SZ);world.add(G);coll(SX,SZ,1.06,.78);blob(SX,SZ-.1,1.5,1.2,.85);W.safe={g:G,door,wheel,open:false,pos:V3(SX,Y,SZ-.3)};POS.safe=V3(SX,Y,SZ-.3);
   reg('safe',G,{name:'Сейф',closeup:{pos:[SX,1.24,1.98],look:[SX,1.1,2.76]}});
   for(let i=0;i<4;i++)reg('dial'+i,W.dials[i].g,{name:'Барабан кода № '+(i+1),parent:'safe'});reg('safeHandle',wheel,{name:'Штурвал сейфа',parent:'safe'});
   const sw=mkSwallow(false);sw.position.set(SX,Y-h/2+th+.075,SZ+.04);sw.rotation.y=PI;world.add(sw);W.swallow2=sw;reg('swallow2',sw,{name:'Ласточка № 2',parent:'safe',active:false});proxy(sw,.16,.14,.24,[0,0,0]);
-  const tg=signMesh(.11,.05,DRAW.tag('№ 2 из 2. Заперта, чтобы не было весны'),{px:110});tg.position.set(SX+.16,Y-h/2+th+.03,SZ-.08);tg.rotation.set(-.9,PI,-.2);world.add(tg);
+  const tg=signMesh(.11,.05,DRAW.tag('Ласточка № 2 из 2'),{px:110});tg.position.set(SX+.16,Y-h/2+th+.03,SZ-.08);tg.rotation.set(-.9,PI,-.2);world.add(tg);
 }
 
 function buildFridge(){const FX=-2.5,FZ=3.07,G=new T.Group(),k=kit(),c=0xe9e2c6,wd=.86,dp=.78,H=1.72;
@@ -1553,7 +1570,7 @@ function buildFridge(){const FX=-2.5,FZ=3.07,G=new T.Group(),k=kit(),c=0xe9e2c6,
   for(const y of[.5,.9,1.3])d.box(M.matte,wd-.2,.05,.07,{p:[wd/2,y,.05],c:0xe8e8e0},.01);
   door.add(d.build());
   const badge=signMesh(.3,.075,(x,Wd,Hh)=>{const g=x.createLinearGradient(0,0,0,Hh);g.addColorStop(0,'#e8eef2');g.addColorStop(1,'#9aa8b2');x.fillStyle=g;x.fillRect(0,0,Wd,Hh);x.strokeStyle='#4a5560';x.lineWidth=4;x.strokeRect(2,2,Wd-4,Hh-4);fitText(x,'❄ ЗИМА‑2 ❄',6,2,Wd-12,Hh-4,{size:Hh*.7,font:F_SERIF,color:'#1f3f6a',weight:'bold italic'})},{px:80,metal:.8,rough:.3});badge.rotation.y=PI;badge.position.set(wd/2,1.58,-.0765);door.add(badge);
-  const fs=signMesh(.5,.26,DRAW.enamel('ЗИМОВКА РАКОВ\nНе размораживать!\nВесну не вносить.','#f4f0e2','#1f3f7a',{font:F_SANS}),{px:150,rough:.35});fs.rotation.y=PI;fs.rotation.z=.03;fs.position.set(wd/2-.04,1.3,-.0765);door.add(fs);
+  const fs=signMesh(.5,.26,DRAW.enamel('ЗИМОВКА РАКОВ\nНе размораживать!','#f4f0e2','#1f3f7a',{font:F_SANS}),{px:150,rough:.35});fs.rotation.y=PI;fs.rotation.z=.03;fs.position.set(wd/2-.04,1.3,-.0765);door.add(fs);
   const dn=signMesh(.2,.15,DRAW.note('Покажу, где раки зимуют!\n(экскурсии по пятницам)',{bg:'#f6e58a'}),{px:160});dn.rotation.y=PI;dn.rotation.z=-.1;dn.position.set(.3,.86,-.0765);door.add(dn);
   door.position.set(-wd/2,0,-dp/2);G.add(door);
   G.position.set(FX,0,FZ);world.add(G);coll(FX,FZ,.92,.84);blob(FX,FZ-.1,1.3,1.2,.85);
@@ -1561,7 +1578,7 @@ function buildFridge(){const FX=-2.5,FZ=3.07,G=new T.Group(),k=kit(),c=0xe9e2c6,
   W.fridge={g:G,door,snow,ic,fl,grass,open:false,spring:false,pos:V3(FX,1,FZ)};reg('fridge',G,{name:'Холодильник «Зима‑2»'});
   // ласточка № 1 (в шарфике) и рак во льду
   const s1=mkSwallow(true);s1.position.set(FX-.2,1.18+.058,FZ-.02);s1.rotation.y=PI+.3;world.add(s1);W.swallow1=s1;reg('swallow1',s1,{name:'Ласточка № 1',active:false});proxy(s1,.16,.14,.24,[0,0,0]);
-  const st=signMesh(.11,.05,DRAW.tag('Ласточка, 1 шт. Весны не делает'),{px:110});st.rotation.y=PI;st.position.set(FX-.2,1.13,FZ-.3);st.rotation.z=.1;world.add(st);W.swTag=st;
+  const st=signMesh(.11,.05,DRAW.tag('Ласточка № 1 из 2'),{px:110});st.rotation.y=PI;st.position.set(FX-.2,1.13,FZ-.3);st.rotation.z=.1;world.add(st);W.swTag=st;
   const s2=mkSwallow(false);s2.position.set(FX+.02,1.18+.058,FZ-.02);s2.rotation.y=PI-.4;s2.visible=false;world.add(s2);W.swallow2f=s2;
   const iceG=new T.Group();const rak=mkCrayfish(true);rak.rotation.y=PI+.35;rak.position.set(0,-.07,0);rak.scale.setScalar(.95);iceG.add(rak);
   const ice=new T.Mesh(wonk(rbox(.36,.25,.34,.04),.008,12,3),M.ice);ice.renderOrder=3;iceG.add(ice);iceG.position.set(FX+.05,.72+.135,FZ+.02);world.add(iceG);W.rak={g:iceG,rak,ice,frozen:true};reg('rak',iceG,{name:'Рак во льду',active:false});
@@ -1577,7 +1594,7 @@ function buildGlobe(){const G=new T.Group(),k=kit(),X=-1.3,Z=2.92;
   G.add(k.build());
   const tilt=new T.Group(),t=kit();t.torus(M.brass,.2,.008,{r:[0,0,PI/2]},6,30,PI);t.cyl(M.brass,.005,.005,.42,{},6);t.sph(M.brass,.016,{p:[0,.2,0]});t.sph(M.brass,.016,{p:[0,-.2,0]});tilt.add(t.build());tilt.position.set(0,1.19,0);tilt.rotation.z=.4;G.add(tilt);
   const spin=new T.Group();const sk=mkSkull();sk.scale.setScalar(1.25);sk.position.y=.01;spin.add(sk);tilt.add(spin);
-  const pl=card('ГОЛОВА м.н.с. КОСТИНА.\nИдёт кругом с 1987 г.\nРуками не трогать — не успеете.',.26,.1,DRAW.plaque('ГОЛОВА м.н.с. КОСТИНА.\nИдёт кругом с 1987 г.\nРуками не трогать — не успеете.',{font:F_SANS}));pl.position.set(.34,0,-.3);pl.rotation.y=PI-.5;G.add(pl);
+  const pl=card('',.26,.1,DRAW.plaque('ЭКСПОНАТ. Вращается с 1987 г.\nРуками не трогать — не успеете.',{font:F_SANS}));pl.position.set(.34,0,-.3);pl.rotation.y=PI-.5;G.add(pl);
   // выселенный глобус на полу
   const gl=new T.Mesh(wonk(new T.SphereGeometry(.17,18,14),.01,8,2),new T.MeshStandardMaterial({map:signTex(2,1,(x,Wd,H)=>{x.fillStyle='#285a80';x.fillRect(0,0,Wd,H);x.fillStyle='#5f8048';for(let i=0;i<14;i++){x.beginPath();x.ellipse(Math.random()*Wd,H*.2+Math.random()*H*.6,20+Math.random()*50,10+Math.random()*30,Math.random()*3,0,TAU);x.fill()}x.strokeStyle='rgba(255,255,255,.25)';x.lineWidth=1;for(let i=1;i<8;i++){x.beginPath();x.moveTo(0,H*i/8);x.lineTo(Wd,H*i/8);x.stroke();x.beginPath();x.moveTo(Wd*i/8,0);x.lineTo(Wd*i/8,H);x.stroke()}},128),roughness:.5}));
   gl.scale.set(1,.8,1);gl.position.set(-.38,.135,-.42);gl.rotation.set(.5,1,0);gl.castShadow=true;G.add(gl);
@@ -1601,7 +1618,7 @@ function buildCat(){const g=new T.Group(),k=kit(),B=0x17171c;
   // хвост-маятник
   const tail=new T.Group(),tk=kit();tk.tube(M.shell,[[0,0,0],[.01,-.2,0],[-.01,-.4,0],[.02,-.52,0],[.07,-.58,0],[.11,-.55,0],[.1,-.5,0]],.022,{c:B},24,8);tk.sph(M.shell,.026,{p:[.1,-.5,0],c:B});tail.add(tk.build());tail.position.set(0,-.14,.05);g.add(tail);
   onWall(g,'S',-.45,2.06,.0);W.cat={g,tail,eyes,mh,hh,stretch:0};POS.cat=V3(-.45,1.6,3.3);reg('catclock',g,{name:'Ходики «Кот»',range:3.2});proxy(g,.36,1.0,.2,[0,-.25,.1]);
-  const sg=signMesh(.46,.2,DRAW.enamel('ХОДИКИ «КОТ»\nЗА ХВОСТ НЕ ТЯНУТЬ —\nВРЕМЯ ТЯНЕТСЯ!','#f4f0e2','#b3261e',{font:F_SANS}),{px:150,rough:.35});onWall(sg,'S',-.45,1.08,.008);sg.rotation.z=-.02;reg('catSign',sg,{name:'Табличка под ходиками'});
+  const sg=signMesh(.46,.2,noSign(ART.cat,{text:'НЕ ТРОГАТЬ!'}),{px:150,rough:.35});onWall(sg,'S',-.45,1.08,.008);sg.rotation.z=-.02;reg('catSign',sg,{name:'Табличка под ходиками'});
   let last=1;ANIM.push((t,dt)=>{const C_=W.cat,sw=Math.sin(t*3.2);tail.rotation.z=sw*.42;tail.scale.y=1+C_.stretch*.9;for(const p of eyes)p.position.x=Math.sign(p.position.x)*.045-sw*.014;
     const s=Math.sign(Math.cos(t*3.2));if(s!==last){last=s;sfx(s>0?'tick':'tock',POS.cat)}const d=new Date();mh.rotation.z=-(d.getMinutes()/60)*TAU;hh.rotation.z=-((d.getHours()%12)/12+d.getMinutes()/720)*TAU});
 }
@@ -1662,7 +1679,7 @@ function buildCloset(){const CX=3.5,CZ=3.12,G=new T.Group(),k=kit(),w=1.5,h=2.3,
   const mkArm=(sx)=>{const piv=new T.Group(),a=kit();a.cyl(Bn,.015,.017,.28,{p:[0,-.14,0]},8);a.sph(Bn,.024,{p:[0,-.29,0]});a.cyl(Bn,.013,.015,.26,{p:[0,-.43,.0]},8);a.box(Bn,.05,.07,.02,{p:[0,-.6,0]},.008);for(let i=0;i<4;i++)a.cyl(Bn,.005,.005,.05,{p:[-.02+i*.013,-.655,0]},4);
     piv.add(a.build());piv.position.set(sx*.2,1.37,.02);piv.rotation.z=sx*.1;S.add(piv);return piv};
   const armL=mkArm(-1),armR=mkArm(1);
-  const tag=signMesh(.17,.085,DRAW.tag('м.н.с. КОСТИН. Потерял голову 12.04.1987.\nС тех пор — как гора на плечах'),{px:140});tag.position.set(.1,1.1,.125);tag.rotation.z=-.12;S.add(tag);
+  const tag=signMesh(.17,.085,DRAW.tag('м.н.с. КОСТИН\nНекомплект с 12.04.1987'),{px:140});tag.position.set(.1,1.1,.125);tag.rotation.z=-.12;S.add(tag);
   const mt=mkMountain();mt.position.set(0,1.42,0);mt.scale.setScalar(.95);S.add(mt);
   const hd=mkSkull();hd.position.set(0,1.56,.01);hd.visible=false;S.add(hd);
   S.position.set(CX+.22,.15,CZ+.02);S.rotation.y=PI;world.add(S);W.skel={g:S,armL,armR,mt,head:hd,talk:0,happy:false};reg('skeleton',S,{name:'Скелет м.н.с. Костина',active:false,range:3});proxy(S,.6,1.9,.3,[0,.95,0]);POS.skel=V3(CX+.22,1.4,CZ-.3);
@@ -1710,19 +1727,19 @@ function buildMisc(){
 }
 
 function buildPosters(){
-  const P1=poster('N',-2.3,1.92,.6,.82,agit({title:'ПРОЛИВАЯ СВЕТ —\nВЫТРИ ЗА СОБОЙ!',sub:'Тёмные дела требуют света и аккуратности',art:(x,Wd,H)=>{x.fillStyle='#111';x.fillRect(-Wd*.3,H*.08,Wd*.34,H*.2);x.fillStyle='#333';x.font='bold '+H*.05+'px '+F_MONO;x.textAlign='center';x.fillText('ДЕЛО',-Wd*.13,H*.19);
+  const P1=poster('N',-2.3,1.92,.6,.82,agit({title:'РАЗЛИЛ —\nВЫТРИ ЗА СОБОЙ!',sub:'Аккуратность — вежливость лаборанта',art:(x,Wd,H)=>{x.fillStyle='#111';x.fillRect(-Wd*.3,H*.08,Wd*.34,H*.2);x.fillStyle='#333';x.font='bold '+H*.05+'px '+F_MONO;x.textAlign='center';x.fillText('ДЕЛО',-Wd*.13,H*.19);
     x.save();x.translate(Wd*.14,-H*.12);x.rotate(-.9);x.strokeStyle='#2a2118';x.lineWidth=5;x.fillStyle='rgba(255,220,90,.9)';x.beginPath();x.arc(0,0,Wd*.11,0,TAU);x.fill();x.stroke();x.fillStyle='#e9dfc0';x.fillRect(-Wd*.03,-Wd*.2,Wd*.06,Wd*.1);x.strokeRect(-Wd*.03,-Wd*.2,Wd*.06,Wd*.1);x.restore();
-    x.fillStyle='rgba(255,210,70,.95)';x.beginPath();x.moveTo(-Wd*.02,-H*.2);x.quadraticCurveTo(-Wd*.16,-H*.1,-Wd*.13,H*.08);x.lineTo(-Wd*.09,H*.08);x.quadraticCurveTo(-Wd*.1,-H*.08,Wd*.02,-H*.17);x.fill()}}),-.02);reg('poster1',P1,{name:'Плакат «Проливая свет…»',range:3.6});
-  const P2=poster('N',.95,1.98,.5,.7,agit({title:'КАЗЁННОЕ\nНЕ СВИСТИ!',band:'#1d2a44',sub:'На воре и шапка горит',art:(x,Wd,H)=>{x.fillStyle='#53483e';x.beginPath();x.ellipse(0,H*.08,Wd*.3,H*.04,0,0,TAU);x.fill();x.fillRect(-Wd*.16,-H*.06,Wd*.32,H*.14);
+    x.fillStyle='rgba(255,210,70,.95)';x.beginPath();x.moveTo(-Wd*.02,-H*.2);x.quadraticCurveTo(-Wd*.16,-H*.1,-Wd*.13,H*.08);x.lineTo(-Wd*.09,H*.08);x.quadraticCurveTo(-Wd*.1,-H*.08,Wd*.02,-H*.17);x.fill()}}),-.02);reg('poster1',P1,{name:'Агитплакат «Разлил — вытри»',range:3.6});
+  const P2=poster('N',.95,1.98,.5,.7,agit({title:'КАЗЁННОЕ\nНЕ ВЫНОСИ!',band:'#1d2a44',sub:'Последствия — на голове',art:(x,Wd,H)=>{x.fillStyle='#53483e';x.beginPath();x.ellipse(0,H*.08,Wd*.3,H*.04,0,0,TAU);x.fill();x.fillRect(-Wd*.16,-H*.06,Wd*.32,H*.14);
     x.fillStyle='#ff7a1a';for(let i=0;i<5;i++){const fx=-Wd*.14+i*Wd*.07;x.beginPath();x.moveTo(fx-Wd*.05,-H*.05);x.quadraticCurveTo(fx-Wd*.02,-H*.2,fx,-H*(.24+(i%2)*.06));x.quadraticCurveTo(fx+Wd*.03,-H*.15,fx+Wd*.05,-H*.05);x.fill()}
     x.fillStyle='#ffd060';for(let i=0;i<4;i++){const fx=-Wd*.1+i*Wd*.07;x.beginPath();x.moveTo(fx-Wd*.025,-H*.05);x.quadraticCurveTo(fx,-H*.16,fx+Wd*.025,-H*.05);x.fill()}
-    x.fillStyle='#c8281e';x.save();x.translate(0,H*.2);x.rotate(-.2);x.fillRect(-Wd*.22,-H*.012,Wd*.44,H*.024);x.restore()}}),.025);reg('poster2',P2,{name:'Плакат «Казённое не свисти!»',range:3.6});
-  const P3=poster('S',-2.5,2.52,.62,.84,agit({title:'НОРМАТИВ:\n2 ЛАСТОЧКИ = 1 ВЕСНА',band:'#1f7a3f',sub:'Одна ласточка весны не делает (ГОСТ 1‑ЛВ)',art:(x,Wd,H)=>{const bird=(bx,by,s)=>{x.save();x.translate(bx,by);x.scale(s,1);x.fillStyle='#1b2646';x.beginPath();x.ellipse(0,0,Wd*.09,H*.035,-.2,0,TAU);x.fill();x.beginPath();x.moveTo(-Wd*.06,0);x.lineTo(-Wd*.2,-H*.05);x.lineTo(-Wd*.12,H*.0);x.lineTo(-Wd*.2,H*.04);x.fill();x.beginPath();x.moveTo(0,-H*.02);x.lineTo(-Wd*.06,-H*.12);x.lineTo(Wd*.04,-H*.02);x.fill();x.fillStyle='#b3402a';x.beginPath();x.arc(Wd*.07,-H*.012,Wd*.02,0,TAU);x.fill();x.restore()};
+    x.fillStyle='#c8281e';x.save();x.translate(0,H*.2);x.rotate(-.2);x.fillRect(-Wd*.22,-H*.012,Wd*.44,H*.024);x.restore()}}),.025);reg('poster2',P2,{name:'Агитплакат «Казённое не выноси»',range:3.6});
+  const P3=poster('S',-2.5,2.52,.62,.84,agit({title:'НОРМАТИВ\nГОСТ 1‑ЛВ',band:'#1f7a3f',sub:'Соблюдай комплектность!',art:(x,Wd,H)=>{const bird=(bx,by,s)=>{x.save();x.translate(bx,by);x.scale(s,1);x.fillStyle='#1b2646';x.beginPath();x.ellipse(0,0,Wd*.09,H*.035,-.2,0,TAU);x.fill();x.beginPath();x.moveTo(-Wd*.06,0);x.lineTo(-Wd*.2,-H*.05);x.lineTo(-Wd*.12,H*.0);x.lineTo(-Wd*.2,H*.04);x.fill();x.beginPath();x.moveTo(0,-H*.02);x.lineTo(-Wd*.06,-H*.12);x.lineTo(Wd*.04,-H*.02);x.fill();x.fillStyle='#b3402a';x.beginPath();x.arc(Wd*.07,-H*.012,Wd*.02,0,TAU);x.fill();x.restore()};
     bird(-Wd*.2,-H*.12,1);bird(Wd*.2,-H*.12,-1);x.fillStyle='#2a2118';x.font='bold '+H*.11+'px '+F_HEAD;x.textAlign='center';x.fillText('+',0,-H*.09);x.fillText('=',0,H*.03);x.fillStyle='#ffd24a';x.beginPath();x.arc(0,H*.13,H*.045,0,TAU);x.fill();
-    for(let i=0;i<8;i++){const a=i/8*TAU;x.fillStyle='#ff6a9a';x.beginPath();x.ellipse(Math.cos(a)*H*.07,H*.13+Math.sin(a)*H*.07,H*.028,H*.016,a,0,TAU);x.fill()}}}),.015);reg('poster3',P3,{name:'Плакат «Норматив: 2 ласточки»',range:3.8});
-  const P4=poster('W',.98,1.95,.56,.78,agit({title:'НЕ ВЫПУСКАЙ\nПАР В СВИСТОК!',band:'#b3261e',sub:'Весь пар уйдёт в свисток — и останется в нём',art:(x,Wd,H)=>{x.fillStyle='#2f5f9a';x.beginPath();x.ellipse(-Wd*.08,H*.08,Wd*.2,H*.11,0,0,TAU);x.fill();x.fillRect(Wd*.08,H*.0,Wd*.16,H*.03);x.fillStyle='#d9b45a';x.fillRect(Wd*.22,-H*.03,Wd*.06,H*.08);
+    for(let i=0;i<8;i++){const a=i/8*TAU;x.fillStyle='#ff6a9a';x.beginPath();x.ellipse(Math.cos(a)*H*.07,H*.13+Math.sin(a)*H*.07,H*.028,H*.016,a,0,TAU);x.fill()}}}),.015);reg('poster3',P3,{name:'Плакат-норматив над холодильником',range:3.8});
+  const P4=poster('W',.98,1.95,.56,.78,agit({title:'БЕРЕГИ ПАР!',band:'#b3261e',sub:'Кипятить только под присмотром',art:(x,Wd,H)=>{x.fillStyle='#2f5f9a';x.beginPath();x.ellipse(-Wd*.08,H*.08,Wd*.2,H*.11,0,0,TAU);x.fill();x.fillRect(Wd*.08,H*.0,Wd*.16,H*.03);x.fillStyle='#d9b45a';x.fillRect(Wd*.22,-H*.03,Wd*.06,H*.08);
     x.strokeStyle='rgba(40,40,40,.5)';x.lineWidth=6;for(let i=0;i<3;i++){x.beginPath();x.moveTo(Wd*.25+i*8,-H*.05);x.bezierCurveTo(Wd*.3,-H*.12,Wd*.18,-H*.16,Wd*.25+i*10,-H*.24);x.stroke()}
-    x.strokeStyle='#2a2118';x.lineWidth=7;x.beginPath();x.arc(-Wd*.08,-H*.04,Wd*.12,PI,0);x.stroke()}}),-.02);reg('poster4',P4,{name:'Плакат «Не выпускай пар в свисток!»',range:3.6});
+    x.strokeStyle='#2a2118';x.lineWidth=7;x.beginPath();x.arc(-Wd*.08,-H*.04,Wd*.12,PI,0);x.stroke()}}),-.02);reg('poster4',P4,{name:'Агитплакат «Береги пар»',range:3.6});
   const P5=poster('E',-2.25,2.3,.56,.76,agit({title:'ТСС! У СТЕН\nЕСТЬ УШИ',band:'#1d2a44',sub:'Проверено. См. ниже ↓',art:(x,Wd,H)=>{x.fillStyle='#c9b98f';for(let r=0;r<4;r++)for(let c=0;c<5;c++){x.fillRect(-Wd*.38+c*Wd*.16+(r%2)*Wd*.08,-H*.22+r*H*.1,Wd*.15,H*.09)}
     x.fillStyle='#e8b89a';x.beginPath();x.ellipse(0,0,Wd*.11,H*.13,0,0,TAU);x.fill();x.strokeStyle='#8a5a3a';x.lineWidth=6;x.beginPath();x.arc(0,0,Wd*.07,-2.2,1.6);x.stroke();x.beginPath();x.arc(Wd*.01,H*.01,Wd*.03,-1,2.4);x.stroke()}}),.02);
   const rules=poster('W',.22,1.92,.52,.74,(x,Wd,H)=>{x.fillStyle='#f1ead2';x.fillRect(0,0,Wd,H);x.fillStyle='#1d2a44';x.fillRect(0,0,Wd,H*.13);fitText(x,'ПРАВИЛА ЛАБОРАТОРИИ БУКВАЛИЗАЦИИ',Wd*.04,0,Wd*.92,H*.13,{size:H*.055,font:F_HEAD,color:'#f2e2a0',weight:'normal'});
@@ -1730,9 +1747,9 @@ function buildPosters(){
     x.strokeStyle='#1d2a44';x.lineWidth=5;x.strokeRect(3,3,Wd-6,H-6);grainCanvas(x,Wd,H,14)},.015);reg('rules',rules,{name:'Правила лаборатории',range:3.6});
   const gz=poster('E',2.18,1.72,.95,.68,(x,Wd,H)=>{x.fillStyle='#efe6cf';x.fillRect(0,0,Wd,H);x.fillStyle='#b3261e';x.fillRect(0,0,Wd,H*.17);fitText(x,'ЗА БУКВУ!',Wd*.03,0,Wd*.6,H*.17,{size:H*.14,font:F_HEAD,color:'#fff3d0',weight:'normal',align:'left'});fitText(x,'Стенгазета каб. № 13 · выходит, когда выпускают',Wd*.6,0,Wd*.38,H*.17,{size:H*.04,font:F_SANS,color:'#fff3d0'});
     const col=(i,t,b)=>{const cx=Wd*(.03+i*.325),cw=Wd*.3;x.fillStyle='#2a2118';fitText(x,t,cx,H*.2,cw,H*.1,{size:H*.05,font:F_HEAD,color:'#7a1b14',weight:'normal',align:'left'});fitText(x,b,cx,H*.31,cw,H*.64,{size:H*.034,font:F_SERIF,color:'#2a2118',align:'left',valign:'top',weight:'normal',lh:1.2})};
-    col(0,'ИТОГИ АВАРИИ','После сбоя Буквализатора в кабинете всё сказанное в поговорках сбывается дословно. Тов. Костин потерял голову. Голова идёт кругом у глобуса. Местком выражает соболезнования и просит голову вернуть владельцу.');
-    col(1,'ХОЛОДИЛЬНИК','В «Зиме‑2» зимуют раки. Вмёрзли. Одна ласточка там уже сидит — и ничего, зима. Вторую завлаб запер в сейф «от греха и от весны». Код, говорит, зарубил на носу. На чьём — не уточнил.');
-    col(2,'ОБЪЯВЛЕНИЯ','Кто тянул кота за хвост?! Опять на три часа задержали обед.\n\nПропал свист. Нашедшему — пар.\n\nПродам гору. С плеч. Самовывоз.');
+    col(0,'ИТОГИ АВАРИИ','После сбоя Буквализатора в кабинете всё сказанное в поговорках сбывается дословно. Местком просит сотрудников следить за речью. Тов. Костин временно некомплектен; просьба не пугаться и не здороваться за руку.');
+    col(1,'ЖИВОЙ УГОЛОК','В «Зиме‑2» без перемен: минус восемнадцать, раки на месте. Птицу просят не кормить — она подотчётная. Рыба от комментариев отказалась. Собака, по слухам, где-то зарыта.');
+    col(2,'ОБЪЯВЛЕНИЯ','Обед снова задержался на три часа. Виновного просим оставить ходики в покое.\n\nУтерян свист. Нашедшему — благодарность в приказе.\n\nОтдам гору. Самовывоз.');
     x.strokeStyle='#2a2118';x.lineWidth=4;x.strokeRect(2,2,Wd-4,H-4);grainCanvas(x,Wd,H,14)},-.012);reg('gazeta',gz,{name:'Стенгазета «За букву!»',range:3.6});
 }
 
@@ -1747,40 +1764,40 @@ const G={state:'boot',t:0,ts:1,flags:{},inv:[],sel:null,busy:0,slow:0,hover:null
   stats:{start:0,time:0,hints:0,fails:0,acts:0,best:null},journal:[],jset:{},hintTier:{},lastHint:null,set:{sens:1,bob:true},cam:{mode:'walk'},dials:[0,0,0,0],placed:{}};
 const CODE=[2,4,1,3];
 const ITEMS={
-  hat:{name:'Шляпа завлаба',desc:'Фетровая, казённая. В ней лежало дело — как завлаб и говорил. Под полями что-то белеет.',secret:{dir:[0,-1,0],text:'На подкладке бирка: «Шляпа казённая, инв. № 13. НА ВОРЕ — ГОРИТ».',j:'hatTag'},scale:1.15},
+  hat:{name:'Шляпа завлаба',desc:'Фетровая, казённая. В ней лежало дело — как завлаб и говорил. Под полями что-то белеет.',secret:{dir:[0,-1,0],text:'На подкладке бирка: «Шляпа казённая, инв. № 13. Огнеопасна при хищениях».',j:'hatTag'},scale:1.15},
   hatFire:{name:'Горящая шляпа',desc:'Горит, но не сгорает: казённое имущество списывается только по акту. Тепло, светло и немного стыдно.',scale:1.05},
   caseDark:{name:'Дело № 13 (тёмное)',desc:'Дело тёмное. Буквально: чёрное как ночь, ни буквы не разобрать.',scale:1.25},
   flask:{name:'Колба',desc:'Круглодонная, пустая. На горлышке болтается бирка.',scale:1.5},
   flaskLight:{name:'Колба со светом',desc:'Пол-литра отборного настольного света. Тёплый, слегка плещется. Не взбалтывать: ослепит.',scale:1.5},
   key:{name:'Ключ к разгадке',desc:'Лежал в деле — где ж ему ещё быть. Латунный, тяжёлый, с биркой на верёвочке.',scale:2},
-  swallow:{name:'Ласточка № 2',desc:'Ласточка. Сидит смирно, смотрит с надеждой, зябко ёжится. На лапке блестит кольцо.',secret:{dir:[0,-1,0],text:'На кольце гравировка: «№ 2 из 2. Норматив: 2 ласт. = 1 весна».',j:'ring'},scale:2.4},
+  swallow:{name:'Ласточка № 2',desc:'Ласточка. Сидит смирно, смотрит с надеждой, зябко ёжится. На лапке блестит кольцо.',secret:{dir:[0,-1,0],text:'На кольце гравировка: «№ 2 из 2».',j:'ring'},scale:2.4},
   crayfish:{name:'Рак',desc:'Оттаявший, красный, недовольный. Ушанку сдал в гардероб. На любой вопрос разводит клешнями и смотрит вверх.',scale:1.8},
   pencil:{name:'Казённый карандаш',desc:'Образцово-показательный. Вы его украли. В первый рабочий день. Мама бы гордилась.',scale:1.9},
   whistle:{name:'Свисток с паром',desc:'Свисток от чайника. Внутри — весь пар, какой был: ушёл туда целиком. Тёплый, распирает, рвётся наружу. На боку что-то выгравировано.',secret:{dir:[0,0,1],text:'Гравировка на боку: «Весь пар — сюда».',j:null},scale:3.4},
-  head:{secret:{dir:[0,0,-1],text:'На затылке химическим карандашом: «Костин, м.н.с. Вернуть владельцу».',j:'skullName'},name:'Голова',desc:'Череп. Перестал идти кругом и смотрит с укоризной. На затылке что-то написано химическим карандашом.',scale:1.4},
+  head:{secret:{dir:[0,0,-1],text:'На затылке химическим карандашом: «Костин, м.н.с.»',j:'skullName'},name:'Голова',desc:'Череп. Перестал идти кругом и смотрит с укоризной. На затылке что-то написано химическим карандашом.',scale:1.4},
   mountain:{name:'Гора (с плеч)',desc:'Небольшая, но настоящая: снег, ёлочки, флажок покорителя. Свалилась с плеч Костина.',scale:.95},
 };
 // ---------- ГРАФ ЗАГАДОК ----------
 // req — какие шаги должны быть сделаны; at — объект(ы); use — предмет в руке; combine — пара предметов;
 // take/give — что уходит/приходит в инвентарь; grp — номер «человеческого» шага из дизайна; near — якорь для подсказки.
 const STEPS=[
-  {id:'takeHat',grp:1,req:[],at:['hat'],give:['hat','caseDark'],near:'hat',hints:['На столе завлаба лежит записка. Он вечно всё терял.','У вешалки справа от двери висит синяя табличка. Прочти её.','Возьми шляпу с вешалки. Дело — в ней.']},
+  {id:'takeHat',grp:1,req:[],at:['hat'],give:['hat','caseDark'],near:'hat',hints:['На столе завлаба лежит записка с рисунком.','Присмотрись к шляпе на вешалке: из-под неё что-то торчит.','Возьми шляпу с вешалки справа от двери. Дело — в ней.']},
   {id:'takeFlask',grp:2,req:[],at:['flask'],give:['flask'],near:'flask',hints:['На лабораторном столе не вся посуда одинаково бесполезна.','У штатива с пробирками стоит колба с биркой. Бирку стоит прочесть.','Возьми колбу с лабораторного стола у левой стены.']},
-  {id:'fillLight',grp:2,req:['takeFlask'],at:['lamp','lampCard'],use:'flask',take:['flask'],give:['flaskLight'],near:'lamp',hints:['Посмотри, что капает из-под абажура настольной лампы.','У лампы стоит табличка с запретом. А тара у тебя как раз есть.','Возьми колбу в руку и щёлкни по настольной лампе.']},
+  {id:'fillLight',grp:2,req:['takeFlask'],at:['lamp','lampCard'],use:'flask',take:['flask'],give:['flaskLight'],near:'lamp',hints:['Посмотри, что капает из-под абажура настольной лампы.','У лампы стоит запрещающий знак. Посмотри, что на нём перечёркнуто, — и вспомни, что у тебя в карманах.','Возьми колбу в руку и щёлкни по настольной лампе.']},
   {id:'pourLight',grp:3,req:['takeHat','fillLight'],combine:['flaskLight','caseDark'],take:['flaskLight','caseDark'],give:['key'],near:'lamp',hints:['Слева от бюста висит плакат. Картинка на нём — почти инструкция.','На плакате из колбы льют свет на чёрную папку. У тебя есть и то и другое.','Щёлкни в карманах по колбе со светом, затем по тёмному делу.']},
-  {id:'openCloset',grp:11,req:['pourLight'],at:['closet'],use:'key',take:['key'],near:'closet',hints:['На ключе болтается бирка. Лупа на кармане покажет её ближе.','Шкаф стоит в правом дальнем углу, на дверце табличка.','Возьми ключ в руку и щёлкни по шкафу.']},
-  {id:'readNose',grp:4,req:[],at:['nose'],near:'bust',hints:['На сейфе висит совет завлаба, на бюсте — цитата академика. Сравни их.','У академика выдающийся нос. Рассмотри его вблизи.','Щёлкни по бюсту, затем по носу, и сосчитай зарубки группами от переносицы.']},
+  {id:'openCloset',grp:11,req:['pourLight'],at:['closet'],use:'key',take:['key'],near:'closet',hints:['На ключе болтается бирка с номером. Лупа на кармане покажет её ближе.','Такой же номер есть на табличке одного из шкафов.','Возьми ключ в руку и щёлкни по шкафу в правом дальнем углу.']},
+  {id:'readNose',grp:4,req:[],at:['nose'],near:'bust',hints:['На дверце сейфа выгравирована картинка. Чей это профиль?','У бюста академика валяется стамеска. Рассмотри его нос вблизи.','Щёлкни по бюсту, затем по носу, и сосчитай зарубки группами от переносицы.']},
   {id:'openSafe',grp:5,req:['readNose'],soft:true,cond:'code',at:['safeHandle'],near:'safe',hints:['Зарубки на носу идут группами. Группа — цифра.','От переносицы к кончику: две, четыре, одна, три.','Код сейфа — 2‑4‑1‑3. Набери его барабанами и щёлкни по штурвалу.']},
   {id:'takeSwallow',grp:5,req:['openSafe'],at:['swallow2'],give:['swallow'],near:'safe',hints:['В сейфе кто-то сидит.','Она не кусается.','Щёлкни по ласточке в открытом сейфе.']},
-  {id:'spring',grp:6,req:['takeSwallow'],at:['fridge','swallow1','rak'],use:'swallow',take:['swallow'],near:'fridge',hints:['Над холодильником висит плакат с арифметикой.','Открой холодильник и посмотри, кто там сидит и что у него на бирке. У тебя — вторая такая же.','Возьми ласточку в руку и щёлкни по холодильнику.']},
+  {id:'spring',grp:6,req:['takeSwallow'],at:['fridge','swallow1','rak'],use:'swallow',take:['swallow'],near:'fridge',hints:['Над холодильником висит плакат с арифметикой в картинках.','Открой холодильник и прочти бирку у птицы. Вторая такая же — у тебя.','Возьми ласточку в руку и щёлкни по холодильнику.']},
   {id:'takeRak',grp:6,req:['spring'],at:['rak'],give:['crayfish'],near:'fridge',hints:['В холодильнике потеплело.','Рак оттаял и сидит на полке.','Щёлкни по раку в холодильнике.']},
-  {id:'steal',grp:7,req:[],at:['pencil'],give:['pencil'],near:'pencil',hints:['У радио висит плакат со шляпой. У спиртовки — записка пожарных. Это одна история.','Прочти табличку у казённого карандаша. И загляни шляпе под поля — лупой на кармане.','Со шляпой в карманах возьми казённый карандаш со стола завлаба.']},
+  {id:'steal',grp:7,req:[],at:['pencil'],give:['pencil'],near:'pencil',hints:['У радио висит плакат со шляпой. Над вешалкой — копоть на стене.','Прочти табличку у казённого карандаша. И загляни шляпе под поля — лупой на кармане.','Со шляпой в карманах возьми казённый карандаш со стола завлаба.']},
   {id:'ignite',grp:7,req:['takeHat','steal'],auto:true,near:'pencil',hints:['','','']},
-  {id:'boil',grp:8,req:['ignite'],at:['burner','whistleK'],use:'hatFire',take:['hatFire','pencil'],give:['whistle'],near:'kettle',hints:['Над чайником висит плакат. Он запрещает ровно то, что тебе нужно.','Спиртовке не хватает огня. Огонь у тебя с собой.','Возьми горящую шляпу в руку и щёлкни по чайнику на спиртовке.']},
-  {id:'grabHead',grp:10,req:[],at:['headSpin'],cond:'slow',give:['head'],near:'head',hints:['Под ходиками висит табличка. Прочти, что именно она запрещает.','Запрещённое сработает. Но ненадолго — стой поближе к глобусной стойке.','Щёлкни по ходикам «Кот», затем сразу по черепу на стойке рядом.']},
+  {id:'boil',grp:8,req:['ignite'],at:['burner','whistleK'],use:'hatFire',take:['hatFire','pencil'],give:['whistle'],near:'kettle',hints:['Над чайником висит плакат. Посмотри, куда на нём уходит пар.','Спиртовке не хватает огня. Огонь у тебя с собой.','Возьми горящую шляпу в руку и щёлкни по чайнику на спиртовке.']},
+  {id:'grabHead',grp:10,req:[],at:['headSpin'],cond:'slow',give:['head'],near:'head',hints:['Под ходиками висит запрещающий знак. Посмотри, что на нём перечёркнуто.','Запрещённое сработает. Но ненадолго — стой поближе к глобусной стойке.','Щёлкни по ходикам «Кот», затем сразу по черепу на стойке рядом.']},
   {id:'giveHead',grp:11,req:['grabHead','openCloset'],at:['skeleton'],use:'head',take:['head'],near:'skel',hints:['На скелете висит бирка. На затылке черепа — надпись.','Чего скелету не хватает, видно невооружённым глазом.','Возьми голову в руку и щёлкни по скелету в шкафу.']},
   {id:'takeMount',grp:11,req:['giveHead'],at:['mountain'],give:['mountain'],near:'closet',hints:['С плеч Костина кое-что свалилось.','Оно лежит на полу перед шкафом.','Подбери гору с пола.']},
-  {id:'placeMount',grp:12,req:['takeMount'],at:['pedestal','device','door'],use:'mountain',take:['mountain'],near:'pedestal',hints:['У двери стоит тумба с латунной табличкой.','На двери висит план эвакуации с картинкой. Начни с того, что внизу.','Возьми гору в руку и щёлкни по тумбе слева от двери.']},
+  {id:'placeMount',grp:12,req:['takeMount'],at:['pedestal','device','door'],use:'mountain',take:['mountain'],near:'pedestal',hints:['У двери стоит тумба. Посмотри, что нарисовано на её табличке.','На двери висит план эвакуации с картинкой. Начни с того, что внизу.','Возьми гору в руку и щёлкни по тумбе слева от двери.']},
   {id:'placeRak',grp:12,req:['placeMount','takeRak'],at:['pedestal','device','door'],use:'crayfish',take:['crayfish'],near:'pedestal',hints:['Посмотри на лампочки звукоприёмника: какие ещё не горят?','На плане эвакуации нарисовано, кто сидит на горе.','Возьми рака в руку и щёлкни по тумбе с горой.']},
   {id:'whistle',grp:12,req:['placeRak','boil'],at:['pedestal','device','door'],use:'whistle',take:['whistle'],near:'pedestal',final:true,hints:['Две лампочки горят. Третья подписана.','Рак разводит клешнями: самому ему нечем.','Возьми свисток в руку и щёлкни по раку на горе.']},
 ];
@@ -1800,7 +1817,7 @@ const SPK={radio:{name:'Радиоточка',color:'#ffb347'},skel:{name:'Ко�
 const INTRO=['Кхм. Раз-раз. Говорит радиоточка кабинета номер тринадцать. Вещаю с семьдесят четвёртого года. Без выходных и без слушателей.',
   'А, новый стажёр. Заперли в первый же день? Рекорд. Прошлый хотя бы до обеда продержался.',
   'Запоминай. После аварии Буквализатора здесь сбывается всё, что сказано в поговорках. Дословно. Бук-валь-но.',
-  'Как выйти? Спроси завлаба. Ах да, он ушёл. Но оставил дело. А дело, как он любил повторять, — в шляпе.',
+  'Как выйти? Завлаб знал. Всё записал в дело — и ушёл. Дело где-то здесь. Ищи, стажёр.',
   'Станет туго — жми кнопку с лампочкой. Подскажу. Съязвлю, но подскажу.'];
 const CASE_TEXT=`ДЕЛО № 13. Опись последствий аварии Буквализатора.
 
@@ -1814,7 +1831,7 @@ const CASE_TEXT=`ДЕЛО № 13. Опись последствий аварии
 
 5. ЧАЙНИК. При кипении пар уходит не туда. Спички изъяты пожарной охраной.
 
-6. ХОДИКИ. Хвост не трогать. Проверено дважды, оба раза опоздал на обед.
+6. ХОДИКИ. Не трогать. Обед и так задерживается.
 
 Завлаб Б. К. Вальный
 
@@ -1822,32 +1839,32 @@ P.S. Казённое имущество не выносить. Последст
 // ---------- записи журнала ----------
 const JOUR={
   law:['Закон кабинета № 13','После аварии Буквализатора поговорки и фразеологизмы здесь сбываются буквально.'],
-  door:['Условие двери','Табличка: «Дверь откроется, когда рак на горе свистнет». Нужны рак, гора и свист.'],
-  plan:['План эвакуации','На двери: «1. Рак. 2. Гора. 3. Свист». На тумбе рядом: «Место для горы».'],
-  note:['Записка завлаба','«Куда я дел дело? А! Дело в шляпе. Как всегда».'],
+  door:['Табличка на двери','«Дверь откроется, когда рак на горе свистнет». Рядом — звукоприёмник с тремя лампочками.'],
+  plan:['План эвакуации','На двери картинка: гора, на ней кто-то красный, вокруг ноты. У двери — тумба с силуэтом на табличке.'],
+  note:['Записка завлаба','«Не забыть!!» — и рисунок: шляпа, из-под которой торчит папка.'],
   caseDark:['Тёмное дело','Дело № 13 чёрное, ни буквы не разобрать.'],
-  lamp:['Лампа','Табличка: «Лампа льёт свет. Тару не подставлять!» Под лампой натекла светящаяся лужица.'],
-  flask:['Колба','Бирка: «Тара для света, 0,5 л».'],
-  poster1:['Плакат у приборов','«Проливая свет — вытри за собой! Тёмные дела требуют света».'],
+  lamp:['Настольная лампа','Из-под абажура капает и собирается в светящуюся лужицу. Рядом знак: перечёркнутая посудина под лампой.'],
+  flask:['Колба','На горлышке бирка: «Тара для света, 0,5 л».'],
+  poster1:['Агитплакат у приборов','На картинке из колбы льют что-то жёлтое на чёрную папку.'],
   caseText:['Дело № 13 (прояснённое)',CASE_TEXT],
-  safe:['Табличка сейфа','«Код забыл? Заруби себе на носу!»'],
-  bust:['Бюст академика','Табличка: «Всё важное я зарубил себе на носу». Нос и правда в зарубках.'],
-  nose:['Код с носа','Зарубки от переносицы к кончику: 2, 4, 1, 3.'],
-  fridge:['Холодильник «Зима‑2»','«Зимовка раков. Не размораживать! Весну не вносить». Внутри — рак во льду и одна ласточка с биркой «весны не делает».'],
-  poster3:['Плакат-норматив','«2 ласточки = 1 весна. Одна ласточка весны не делает».'],
-  ring:['Кольцо ласточки','«№ 2 из 2. Норматив: 2 ласт. = 1 весна».'],
-  gazeta:['Стенгазета «За букву!»','Раки вмёрзли в «Зиме‑2». Вторую ласточку завлаб запер в сейф «от весны». Код зарубил на носу. Костин потерял голову — она идёт кругом у глобуса. «Кто тянул кота за хвост? Опять задержали обед».'],
-  cat:['Ходики «Кот»','«За хвост не тянуть — время тянется!»'],
-  head:['Глобусная стойка','«Голова м.н.с. Костина. Идёт кругом с 1987 г. Руками не трогать — не успеете».'],
-  closet:['Шкаф','«В нём скелет. Как в любом приличном учреждении». Заперт на ключ.'],
-  skel:['Бирка на скелете','«м.н.с. Костин. Потерял голову 12.04.1987. С тех пор — как гора на плечах».'],
-  pencil:['Казённый карандаш','Табличка: «Не воровать! На воре и шапка горит».'],
-  hatTag:['Бирка в шляпе','«Шляпа казённая. На воре — горит».'],
-  poster2:['Плакат у радио','«Казённое не свисти! На воре и шапка горит».'],
-  kettle:['Чайник и спиртовка','«Спички изъяты пожарной охраной. Огонь добывайте по поговорке». На носике чайника — свисток.'],
-  poster4:['Плакат над чайником','«Не выпускай пар в свисток! Весь пар уйдёт в свисток — и останется в нём».'],
+  safe:['Табличка сейфа','Гравировка: профиль с длинным носом в насечках, стрелка и четыре окошка.'],
+  bust:['Бюст академика','И. И. Буквоедов, 1889–1974. У подножия — стамеска и гипсовая крошка.'],
+  nose:['Нос академика','Весь в зарубках. Зарубки идут группами.'],
+  fridge:['Холодильник «Зима‑2»','«Зимовка раков. Не размораживать!» Внутри — рак во льду и ласточка с биркой «№ 1 из 2».'],
+  poster3:['Плакат над холодильником','Картинка: птица + птица = солнце и цветок.'],
+  ring:['Кольцо ласточки','«№ 2 из 2».'],
+  gazeta:['Стенгазета «За букву!»','Костин «временно некомплектен». В «Зиме‑2» без перемен. Обед задержался на три часа — «оставьте ходики в покое».'],
+  cat:['Знак под ходиками','Перечёркнутая рука, которая тянет кота за хвост.'],
+  head:['Глобусная стойка','«Экспонат. Вращается с 1987 г. Руками не трогать — не успеете».'],
+  closet:['Шкаф','«Шкаф инв. № 13‑Ш. В нём скелет». Заперт.'],
+  skel:['Бирка на скелете','«м.н.с. Костин. Некомплект с 12.04.1987». Головы нет, на плечах — гора.'],
+  pencil:['Казённый карандаш','Табличка: «Не воровать!»'],
+  hatTag:['Бирка в шляпе','«Шляпа казённая. Огнеопасна при хищениях».'],
+  poster2:['Агитплакат у радио','Картинка: шляпа в огне и красный карандаш.'],
+  kettle:['Чайник и спиртовка','Записка: «Спички изъяты пожарной охраной». На носике чайника — свисток.'],
+  poster4:['Агитплакат над чайником','Картинка: чайник, от свистка идут волны.'],
   rak:['Рак','Оттаял. Недоволен. На вопросы разводит клешнями.'],
-  skullName:['Надпись на черепе','«Костин, м.н.с. Вернуть владельцу».'],
+  skullName:['Надпись на черепе','«Костин, м.н.с.»'],
 };
 // ---------- реакции на неверные действия (предмет > объект) ----------
 // [текст, нелепость 1..5]; nr — «почти правильно»
@@ -1983,7 +2000,7 @@ const FAIL_OBJ={
   catclock:['Коту это не интересно. Его интересует только хвост. Собственный.'],bust:['Академик невозмутим. Он гипс.'],
   nose:['Нос не трогать — зарубки сотрёшь.'],safe:['Сейф открывается кодом. Больше ничем — я за сорок лет всё перепробовала. Мысленно.'],
   fridge:['Холодильнику это ни к чему. У него зима, ему хорошо.'],closet:['Шкаф заперт. Этим его не открыть.'],
-  skeleton:['Костин: «Благодарю, но мне бы голову».'],pedestal:['На тумбе латунная табличка. Этот предмет в ней не упомянут.'],door:['Дверь на это не реагирует. Только рак, только гора, только свист.'],
+  skeleton:['Костин: «Благодарю, но мне бы голову».'],pedestal:['На тумбе латунная табличка с рисунком. Этот предмет на ней не нарисован.'],door:['Дверь на это не реагирует. Только рак, только гора, только свист.'],
   device:['Звукоприёмник ждёт свиста. Причём рачьего.'],lamp:['Лампа льёт свет и на это не отвлекается.'],burner:['Спиртовка холодная. Это её не согреет.'],
   headSpin:['Голова идёт кругом и ничего не принимает. Ей бы остановиться.'],globe:['Стойка занята головой.'],rack:['Вешалка — для верхней одежды.'],
   pencilStand:['На подушечке лежит только казённое.'],note:['Записка и так всё сказала.'],hat:['Шляпа занята: в ней дело.'],
@@ -1997,7 +2014,7 @@ const FAIL_ITEM={
 };
 const FAIL_ANY=['Не сработает. Здесь работает только буквальное.'];
 const HEAD_FAIL=['Голова идёт кругом — не ухватишь.','Мимо. Тридцать оборотов в минуту, стажёр.','Пальцы отбило. Она быстрее тебя.','Нет. Пока она так вертится — без шансов. Была бы она помедленнее…'];
-const SAFE_FAIL=['Не тот код. Сейф даже не обиделся.','Мимо. На дверце, кстати, табличка. Завлаб любил оставлять советы.','Сейф молчит. Он в этом кабинете самый воспитанный.','Нет. Перебор — десять тысяч комбинаций. Я подожду, мне с семьдесят четвёртого не к спеху.','Опять нет. Наугад тут открывали только форточку.'];
+const SAFE_FAIL=['Не тот код. Сейф даже не обиделся.','Мимо. На дверце, кстати, табличка с картинкой.','Сейф молчит. Он в этом кабинете самый воспитанный.','Нет. Перебор — десять тысяч комбинаций. Я подожду, мне с семьдесят четвёртого не к спеху.','Опять нет. Наугад тут открывали только форточку.'];
 // ---------- декоративные реакции ----------
 const DECOR={
   radio:['Что смотришь? Я радиоточка. Одна программа, одна громкость, одно мнение.','В семьдесят четвёртом тут тоже был стажёр. Спросил, где выключатель. Больше не спрашивал.','Передаём сигналы точного времени. Пип. Пип. Сама не знаю который час — спроси у кота.','Погода в кабинете: в холодильнике зима, в стакане буря, в шкафу без перемен.','Музыку заказывали? Нет? А она играет. Джаз. Потому что шпионский — больно уж вы подозрительны.'],
@@ -2024,12 +2041,12 @@ const DECOR={
   bucket:['Бьёшь баклуши? В рабочее время? Одобряю.','Тук-тук-тук. Баклуши биты. Производительность — ноль. Всё как у людей.'],
   switch:['Щёлк. Темнота — друг молодёжи, но не стажёров.','Щёлк. Да будет свет. Сказал монтёр и перерезал провода.'],
   jars:['«Мёд речей», «Тоска зелёная», «Соль шутки». Соли, кстати, осталось на донышке.','«Вода для толчения в ступе». Ступу списали, вода осталась.'],
-  bust:['Академик Буквоедов. Основатель. Говорил: «Всё важное я зарубил себе на носу». Нос поэтому рос.'],
-  catSign:['«За хвост не тянуть — время тянется». Судя по табличке, кто-то уже тянул.'],
+  bust:['Академик Буквоедов. Основатель. Гипс, пыль, величие. У подножия кто-то забыл стамеску.'],
+  catSign:['Запрещающий знак под ходиками. Раз запрещают — значит, кто-то уже пробовал.'],
   rack:['Вешалка. Шарф завлаба, зонт завлаба. Самого завлаба нет.'],
   globe:['Глобусная стойка. Глобус выселили — голове нужнее. Она идёт кругом.'],
   rules:['Правила лаборатории. Пункт шестой особенно удался.'],
-  lampCard:['«Лампа льёт свет. Тару не подставлять!» Значит, подставляли.'],
+  lampCard:['Запрещающий знак у лампы. Раз запрещают — значит, кто-то уже подставлял.'],
   pencilStand:['Подушечка для казённого карандаша. Бархат. Карандаш жил лучше стажёров.'],
   swallow1:['Чирик. Ласточка в шарфике. Дрожит, но держится.','Ласточка косится на бирку у себя под лапами.'],
   catIdle:['Мяу. В смысле — тик-так.'],
@@ -2094,7 +2111,7 @@ function failUse(item,obj){let f=FAIL[item+'>'+obj];if(!f&&(obj==='device'||obj=
     if(fo&&n<=fo.length)f=[fo[n-1],2];else if(fi)f=[fi[(n-1)%fi.length],2];else f=[FAIL_ANY[0],1]}
   const it=INTER[obj];if(it&&it.obj)wiggle(it.obj,'z',.03,.4,4);
   return failSay(f,ITEMS[item].name+' → '+(typeof it.name==='function'?it.name():it.name))}
-FAIL['crayfish>pedestal']=()=>['Рак на голой тумбе. Прочитал табличку, обиделся и слез.',1,1];
+FAIL['crayfish>pedestal']=()=>['Рак на голой тумбе. Посмотрел на табличку, обиделся и слез.',1,1];
 FAIL['whistle>pedestal']=()=>G.flags.placeMount?['Свисток на горе шипит и молчит. Лампочка «СВИСТ» не загорелась — видимо, не засчитано.',1,1]:['Свисток на голой тумбе. Ни одна лампочка даже не моргнула.',1,1];
 FAIL['head>skeleton']=()=>['Костин: «Минуточку, я не готов!»',1,1];
 
@@ -2134,7 +2151,7 @@ function shakeCam(a){PL.shake=Math.max(PL.shake,a)}
 
 const FX={
   async takeHat(){const h=W.hat;setActive('hat',false);const folder=mkCase(true);folder.position.copy(h.position);folder.visible=false;world.add(folder);
-    pop(h,.3,.4);sfx('boing',h.position);await wait(.25);folder.visible=true;folder.rotation.set(.4,.3,1.2);
+    pop(h,.3,.4);sfx('boing',h.position);await wait(.25);W.hatPeek.visible=false;folder.visible=true;folder.rotation.set(.4,.3,1.2);
     tween(.5,e=>{folder.position.y=h.position.y-.02-e*.25;folder.rotation.z=1.2+e*2},Ease.outQuad);sfx('paper',h.position);burst(h.position.clone(),{n:14,color:[0xefe6cf,0xcdb486],size:.03,vs:1});
     await flyToCam(h,.5);await flyToCam(folder,.45);world.remove(folder);jadd('caseDark')},
   async takeFlask(){setActive('flask',false);await flyToCam(W.flask,.5);jadd('flask')},
@@ -2216,7 +2233,7 @@ const AFTER={
   takeFlask(){return say('radio','Колба. Пустая. На бирке что-то написано — читай, ты же грамотный.')},
   fillLight(){return say('radio','Подставил тару под лампу — и натекло. Лампа же «льёт свет». Чему вас только учат.')},
   openCloset(){say('radio','Шкаф открыт. И в нём, как положено в приличном учреждении, — скелет. Знакомься: Костин, младший научный.');return sayQ('skel','О! Живой человек. Простите, что не киваю — нечем. Потерял голову. С тех пор как гора на плечах. Буквально.')},
-  readNose(){return say('radio','Зарубки на носу: две, четыре, одна, три. Завлаб зарубил код на носу. Не на своём, заметь, — свой он берёг.')},
+  readNose(){return say('radio','Нос академика. Весь в зарубках. Кто-то портил казённый гипс стамеской — и, заметь, аккуратно, группами.')},
   openSafe(){say('radio','Щёлк. Сорок лет мечтала услышать этот звук. Вру. Мне всё равно.');return sayQ('radio','А вот и птица. Завлаб её запер и никому не объяснил зачем.')},
   takeSwallow(){return say('radio','Взял птицу. Не сожми — она подотчётная.')},
   takeRak(){return say('rak','Руки! То есть клешни прочь! Ладно, несите. Только не в кипяток.')},
@@ -2234,13 +2251,13 @@ function once(k){if(G.flags['_'+k])return false;G.flags['_'+k]=1;return true}
 const USE={
   radio(){const s=nextStep();if(Math.random()<.35&&s)return say('radio','Скучаешь? Жми на лампочку — подскажу. Или стой, мне не жалко, я тут с семьдесят четвёртого.');decor('radio')},
   hat(){say('radio',G.flags.boil?'Шляпа остыла и делает вид, что ничего не было.':'Шляпа завлаба.')},
-  note(){jadd('note');showPaper('Записка','Найдена на столе завлаба','Куда я дел дело?..\n\nА! Дело в шляпе.\nКак всегда.\n\n— Б. К.',true)},
-  lamp(){jadd('lamp');pop(W.lamp.shade,.1,.4);say('radio','Лампа льёт свет. Буквально: кап-кап, вон лужица натекла. Табличка просит тару не подставлять. Значит, кто-то уже подставлял.')},
+  note(){jadd('note');if(once('note'))say('radio','Каракули завлаба. Художник из него — как из меня телевизор.')},
+  lamp(){jadd('lamp');pop(W.lamp.shade,.1,.4);say('radio','Настольная лампа. Из-под абажура капает. Вон, лужица натекла — светится.')},
   lampCard(){jadd('lamp');decor('lampCard')},
   flask(){say('radio','Пустая колба. Свою службу сослужила.')},
   bust(){jadd('bust');if(once('bust'))decor('bust')},
-  nose(){say('radio','Зарубки: две, четыре, одна, три. От переносицы к кончику. Запиши, а лучше заруби.')},
-  safe(){jadd('safe');if(once('safe')&&!G.flags.openSafe)say('radio','Сейф. Кодовый. На дверце табличка: завлаб обожал давать советы.')},
+  nose(){say('radio','Зарубки, зарубки. Группами. Считать умеешь?')},
+  safe(){jadd('safe');if(once('safe')&&!G.flags.openSafe)say('radio','Сейф. Кодовый. Четыре барабана. На дверце гравировка — завлаб любил ребусы.')},
   safeHandle(){const ok=G.dials.every((v,i)=>v===CODE[i]);if(ok){G.flags.readNose=G.flags.readNose||true;doStep(STEP.openSafe,'safeHandle')}else{sfx('buzz',W.safe.pos);wiggle(W.safe.wheel,'z',.25,.5,6);const n=failIdx.safe=(failIdx.safe||0)+1;failSay([SAFE_FAIL[(n-1)%SAFE_FAIL.length],1,1],'Код '+G.dials.join('')+' → Сейф')}},
   swallow1(){sfx('chirp',POS.fridge);pop(W.swallow1,.3,.4);jadd('fridge');decor('swallow1')},
   fridge(){if(G.busy)return;const o=!W.fridge.open;G.busy++;openFridge(o).then(()=>{G.busy--});if(o){jadd('fridge');if(once('fridge'))say('radio','«Зима‑2». Тут зимуют раки. Вон, вмёрз один, в ушанке. И птица какая-то сидит, с биркой.')}},
@@ -2250,14 +2267,14 @@ const USE={
   burner(){jadd('kettle');if(G.flags.boil)return say('radio','Чайник выкипел в свисток. Чая не будет. Его тут с семьдесят девятого не будет.');wiggle(W.kettle.ket,'z',.05,.4,5);say('radio','Чайник холодный, спиртовка не горит. Рядом записка пожарных. На носике — свисток. Молчит.')},
   whistleK(){USE.burner()},
   catclock(){if(G.slow>0)return say('radio','Кот уже растянут до предела. Дальше — только общество защиты животных.');jadd('cat');sfx('meow',POS.cat);sfx('slowIn');G.slow=12;G.slowMax=12;MUS.setSlow(true);shakeCam(.3);
-    tween(.5,e=>W.cat.stretch=e,Ease.outBack);pop(W.cat.g,.15,.5);say('radio',G.flags.grabHead?'Тянешь кота за хвост — тянешь время. Зачем? Просто так? Кот запомнит.':'Тянешь кота за хвост — тянешь время. Вот оно и тянется. Секунд двенадцать — не зевай!')},
+    tween(.5,e=>W.cat.stretch=e,Ease.outBack);pop(W.cat.g,.15,.5);say('radio',G.flags.grabHead?'Мяу. Опять? Кот запомнит.':'Мяу. Кот недоволен. И время… ты тоже это чувствуешь?')},
   catSign(){jadd('cat');decor('catSign')},
   headSpin(){jadd('head');const n=failIdx.head=(failIdx.head||0)+1;sfx('bonk',POS.head);failSay([HEAD_FAIL[(n-1)%HEAD_FAIL.length],1,1],'Схватить голову на полном ходу')},
   globe(){jadd('head');if(G.flags.grabHead)return say('radio','Стойка свободна. Глобус может возвращаться — если простит.');decor('globe')},
   closet(){if(!W.closet.open){jadd('closet');wiggle(W.closet.g,'z',.01,.4,6);sfx('knock',POS.closet);say('radio','Заперто. На табличке: «В нём скелет. Как в любом приличном учреждении». Замочная скважина — под ключ.')}else USE.skeleton()},
   skeleton(){jadd('skel');sfx('bone',POS.skel);const L=G.flags.giveHead?['Костин: «Кивок. Видали? Могу ещё. Кивок».','Костин: «Я вспомнил, зачем шёл в восемьдесят седьмом. За кефиром. Магазин, наверное, уже закрыт».','Костин: «Заходите ещё. У нас в шкафу хорошо: тихо, моль».']:['Костин: «Голову я потерял. Где — не помню: нечем».','Костин: «Тяжело. Это не метафора, посмотрите на плечи».','Костин: «Младший научный сотрудник Костин. Стаж — до костей».'];const n=decIdx.skel=(decIdx.skel||0);decIdx.skel=n+1;say('skel',L[n%L.length])},
   pedestal(){jadd('plan');say('radio',G.placed.rak?'Рак на горе. Горят две лампочки из трёх. Рак разводит клешнями.':G.placed.mount?'Гора на тумбе. На звукоприёмнике горит одна лампочка из трёх.':'Тумба с латунной табличкой. Завлаб всё предусмотрел. Кроме того, что запрёт стажёра.')},
-  door(){jadd('door');jadd('plan');sfx('knock',W.door.position);wiggle(W.door,'y',.012,.4,6);say('radio','Заперто. «Откроется, когда рак на горе свистнет». Завлаб пошутил. А комната поняла буквально.')},
+  door(){jadd('door');jadd('plan');sfx('knock',W.door.position);wiggle(W.door,'y',.012,.4,6);say('radio','Заперто. Табличку видишь? Завлаб пошутил. А комната поняла буквально.')},
   device(){jadd('door');say('radio','Звукоприёмник. Слушает, не свистнет ли рак на горе. Три лампочки: рак, гора, свист. '+(['Пока не горит ни одна.','Одна уже зелёная.','Две зелёные. Почти.','Все зелёные.'])[(G.placed.rak?1:0)+(G.placed.mount?1:0)+(G.flags.whistle?1:0)])},
   switch(){const L=W.ceilLamp;L.on=!L.on;sfx('sw',INTER.switch.obj.position);W.switchTog.rotation.x=L.on?.4:-.4;decIdx.switch=L.on?1:0;decor('switch')},
   ear(){sfx('squeak',W.ear.position);wiggle(W.ear,'z',.35,.7,6);pop(W.ear,.2,.5);decor('ear')},
@@ -2285,11 +2302,11 @@ const USE={
   jars(){sfx('ding',INTER.jars.obj.position);decor('jars')},
   rack(){wiggle(W.rack,'z',.03,.5,5);decor('rack')},
   rules(){decor('rules')},
-  gazeta(){jadd('gazeta');showPaper('Стенгазета «За букву!»','Орган месткома кабинета № 13','ИТОГИ АВАРИИ. После сбоя Буквализатора в кабинете всё сказанное в поговорках сбывается дословно. Тов. Костин потерял голову; голова идёт кругом у глобуса. Местком просит голову вернуть владельцу.\n\nХОЛОДИЛЬНИК. В «Зиме‑2» зимуют раки. Вмёрзли. Одна ласточка там уже сидит — и ничего, зима. Вторую завлаб запер в сейф «от греха и от весны». Код, говорит, зарубил на носу. На чьём — не уточнил.\n\nОБЪЯВЛЕНИЯ. Кто тянул кота за хвост?! Опять на три часа задержали обед.\nПропал свист. Нашедшему — пар.\nПродам гору. С плеч. Самовывоз.')},
-  poster1(){jadd('poster1');say('radio','«Проливая свет — вытри за собой». Агитплакат шестьдесят восьмого года. До сих пор актуален: тёмных дел не убавилось.')},
-  poster2(){jadd('poster2');say('radio','«Казённое не свисти! На воре и шапка горит». Нарисовано с натуры. Натурщика потом тушили.')},
-  poster3(){jadd('poster3');say('radio','«Норматив: две ласточки — одна весна». Одна, стало быть, не делает. ГОСТ есть ГОСТ.')},
-  poster4(){jadd('poster4');say('radio','«Не выпускай пар в свисток». А иногда надо. Если свисток — всё, что тебе нужно.')},
+  gazeta(){jadd('gazeta');showPaper('Стенгазета «За букву!»','Орган месткома кабинета № 13','ИТОГИ АВАРИИ. После сбоя Буквализатора в кабинете всё сказанное в поговорках сбывается дословно. Местком просит сотрудников следить за речью. Тов. Костин временно некомплектен; просьба не пугаться и не здороваться за руку.\n\nЖИВОЙ УГОЛОК. В «Зиме‑2» без перемен: минус восемнадцать, раки на месте. Птицу просят не кормить — она подотчётная. Рыба от комментариев отказалась. Собака, по слухам, где-то зарыта.\n\nОБЪЯВЛЕНИЯ. Обед снова задержался на три часа. Виновного просим оставить ходики в покое.\nУтерян свист. Нашедшему — благодарность в приказе.\nОтдам гору. Самовывоз.')},
+  poster1(){jadd('poster1');say('radio','Агитплакат шестьдесят восьмого года. Художник старался. Лаборант на картинке — нет.')},
+  poster2(){jadd('poster2');say('radio','Нарисовано с натуры. Натурщика потом тушили.')},
+  poster3(){jadd('poster3');say('radio','Норматив. Утверждён, согласован, повешен. ГОСТ есть ГОСТ.')},
+  poster4(){jadd('poster4');say('radio','«Береги пар». Берегли. Чаю с семьдесят девятого так и не попили.')},
   ceil(){say('radio','Потолочная лампа. Мигает с семьдесят восьмого. Электрик обещал зайти после дождичка в четверг.')},
   desk(){say('radio','Стол завлаба. Сукно, чернила, записка, казённый карандаш. И лампа, которая льёт свет прямо на стол.')},
   mountain(){},swallow2(){},
@@ -2445,7 +2462,7 @@ function loop(now){requestAnimationFrame(loop);let raw=(now-lastT)/1000;lastT=no
   if(G.state==='pause'){renderFrame(G.t);return}
   G.t+=rdt;G.rdt=rdt;if(G.state==='play')G.stats.time+=rdt;
   // «время тянется»
-  if(G.slow>0){G.slow-=rdt;$('slowBar').style.display='block';$('slowFill').style.width=Math.max(0,G.slow/G.slowMax*100)+'%';if(G.slow<=0){G.slow=0;$('slowBar').style.display='none';sfx('slowOut');MUS.setSlow(false);const s0=W.cat.stretch;tween(.5,e=>W.cat.stretch=s0*(1-e),Ease.outBounce);if(!G.flags.grabHead&&G.state==='play')say('radio','Время снова побежало. Кот обиделся, но хвост при нём — можно тянуть ещё.')}}
+  if(G.slow>0){G.slow-=rdt;$('slowBar').style.display='block';$('slowFill').style.width=Math.max(0,G.slow/G.slowMax*100)+'%';if(G.slow<=0){G.slow=0;$('slowBar').style.display='none';sfx('slowOut');MUS.setSlow(false);const s0=W.cat.stretch;tween(.5,e=>W.cat.stretch=s0*(1-e),Ease.outBounce);if(!G.flags.grabHead&&G.state==='play')say('radio','Время снова побежало. Кот обиделся.')}}
   G.ts=lerp(G.ts,G.slow>0?.11:1,Math.min(1,rdt*7));GFX.slow=lerp(GFX.slow,G.slow>0?1:0,Math.min(1,rdt*5));if(GFX.slow<.003)GFX.slow=0;
   const wdt=rdt*G.ts;G.wt+=wdt;
   if(G.state==='play')movePlayer(rdt);
