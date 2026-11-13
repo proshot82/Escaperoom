@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Кабинет № 13 — НИИ Прикладной Абсурдистики</title>
 <style>
 :root{--paper:#efe6cf;--paper2:#e2d6b8;--ink:#2a2118;--red:#b3261e;--amber:#ffb347;--teal:#59c9b9;--dark:#0b0d12}
@@ -133,6 +133,43 @@ kbd{display:inline-block;min-width:24px;padding:1px 7px;margin:0 2px;border:1px 
 #credits{position:absolute;left:0;right:0;top:100%;text-align:center;font-size:16px;line-height:1.5}
 #credits h4{margin:20px 0 2px;font:bold 12px 'Courier New',monospace;letter-spacing:.3em;color:#7a1b14;text-transform:uppercase}
 #fade{position:fixed;left:0;top:0;right:0;bottom:0;background:#000;opacity:0;pointer-events:none;z-index:50;transition:opacity .8s}
+#rotTip{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:60;display:none;padding:7px 14px;border-radius:16px;background:rgba(14,12,9,.85);border:1px solid rgba(201,185,143,.4);font:12px Georgia,serif;color:#f3ead0;white-space:nowrap;pointer-events:none}
+html,body,#c{touch-action:none;overscroll-behavior:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
+.sheet,#pauseCard,#finalWrap{touch-action:pan-y}
+#insClose{pointer-events:auto;margin-top:12px;font-size:14px;padding:7px 18px}
+#btns{right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+#inv{bottom:calc(14px + env(safe-area-inset-bottom,0px));flex-wrap:wrap;justify-content:center;max-width:96vw}
+#pauseCard{max-height:94vh;overflow:auto}
+body.touch #handIcon{display:none!important}
+body.touch .slot i{opacity:1}
+body.touch #label{transform:translate(-50%,-72px)}
+body.touch .rb span,body.touch .slot span{display:none}
+body.touch .slot.sel span{display:block}
+@media (orientation:portrait){body.touch #rotTip{display:block}}
+/* компактный интерфейс: телефоны и низкие окна */
+@media (max-height:520px),(max-width:720px){
+  .slot{width:54px;height:54px;border-radius:8px}.slot b{font-size:10px}.slot i{width:22px;height:22px;right:-6px;top:-6px}
+  #inv{min-height:66px;padding:5px 7px;gap:6px;border-radius:11px}
+  .rb{width:44px;height:44px}.rb svg{width:22px;height:22px}#btns{gap:8px}
+  #subs{bottom:calc(106px + env(safe-area-inset-bottom,0px));width:min(620px,74vw)}#subText{font-size:14px;padding:6px 12px;min-height:0;line-height:1.3}#subName{font-size:10px}
+  #label{font-size:13px;padding:4px 10px}#label small{font-size:10px}
+  #toast{right:10px;top:calc(8px + env(safe-area-inset-top,0px));max-width:240px;font-size:12px;padding:6px 10px}
+  #handTip{display:none!important}
+  #mouseTip{font-size:12px;gap:8px 16px;padding:9px 14px;top:12%}
+  #closeHint{top:calc(8px + env(safe-area-inset-top,0px));padding:7px 16px;font-size:13px}#slowBar{top:48px;width:220px;font-size:11px}
+  #insCard{width:min(300px,44vw);padding:12px 16px}#insCard h3{font-size:17px}#insDesc{font-size:13px;line-height:1.35}#insSecret{font-size:12px;padding:6px 8px}#insTip{bottom:8px;font-size:11px;padding:4px 12px}
+  #journal,#paper{padding:18px 20px;max-height:90vh}.sheet h3{font-size:19px}#journalList{font-size:14px}#paperBody{font-size:14px}
+  #pauseCard{padding:16px 20px}#pauseCard h3{font-size:21px}.row{margin:8px 0;font-size:14px}.row input[type=range]{width:44vw;max-width:240px}
+  #loadJoke{font-size:15px;margin-top:24px;min-height:40px}.stamp{font-size:12px;margin-bottom:12px}
+  #titleKeys{margin-top:16px;font-size:12px;line-height:1.6}.btn{margin-top:18px;font-size:17px;padding:11px 30px}#titleNote{display:none}
+  #stats{font-size:14px;padding:8px 14px}#creditsBox{height:22vh}
+}
+@media (orientation:portrait) and (max-width:720px){
+  #btns{flex-direction:column;bottom:calc(92px + env(safe-area-inset-bottom,0px));right:calc(10px + env(safe-area-inset-right,0px))}
+  #subs{width:80vw;left:calc(50% - 26px);bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+  body.touch #toast{top:calc(44px + env(safe-area-inset-top,0px))}
+  #insCard{left:5vw;right:5vw;top:auto;bottom:11vh;width:auto;transform:none;rotate:0deg}
+}
 #touch{background:#0b0d12;z-index:100;padding:30px}
 #touch p{max-width:520px;font-size:19px;line-height:1.5}
 #err{position:fixed;left:0;right:0;bottom:0;background:#7a1b14;color:#fff;font:13px 'Courier New',monospace;padding:8px 14px;z-index:200;display:none;white-space:pre-wrap}
@@ -160,7 +197,7 @@ kbd{display:inline-block;min-width:24px;padding:1px 7px;margin:0 2px;border:1px 
   <div id="inv"></div>
 </div>
 
-<div id="inspect"><div id="insCard"><div class="form">Опись имущества · форма № 13‑О</div><h3 id="insName"></h3><div id="insDesc"></div><div id="insSecret"></div></div><div id="insTip">тащи мышью — вращать · правая кнопка — убрать</div></div>
+<div id="inspect"><div id="insCard"><div class="form">Опись имущества · форма № 13‑О</div><h3 id="insName"></h3><div id="insDesc"></div><div id="insSecret"></div><button class="btn small" id="insClose">Убрать</button></div><div id="insTip">тащи мышью — вращать · правая кнопка — убрать</div></div>
 
 <div id="journal" class="sheet"><span class="x" data-close="journal">✕ закрыть</span><h3>Журнал наблюдений стажёра</h3><div class="form">НИИ Прикладной Абсурдистики · кабинет № 13 · вести разборчиво</div><div id="journalList"></div></div>
 <div id="paper" class="sheet"><span class="x" data-close="paper">✕ закрыть</span><h3 id="paperTitle"></h3><div class="form" id="paperForm"></div><div id="paperBody"></div></div>
@@ -191,7 +228,7 @@ kbd{display:inline-block;min-width:24px;padding:1px 7px;margin:0 2px;border:1px 
     <div class="form mono" style="font-size:11px;letter-spacing:.18em;color:#7b6a4a;border-bottom:2px solid #2a2118;padding-bottom:8px;margin-bottom:8px">ПАУЗА · ВРЕМЯ НЕ ИДЁТ, ЗАРПЛАТА ТОЖЕ</div>
     <div class="row"><label for="sMusic">Музыка</label><input type="range" id="sMusic" min="0" max="100" value="55"></div>
     <div class="row"><label for="sSfx">Звуки и голоса</label><input type="range" id="sSfx" min="0" max="100" value="80"></div>
-    <div class="row"><label for="sSens">Чувствительность мыши</label><input type="range" id="sSens" min="10" max="200" value="100"></div>
+    <div class="row"><label for="sSens">Чувствительность обзора</label><input type="range" id="sSens" min="10" max="200" value="100"></div>
     <div class="row"><label for="sQual">Качество графики</label><select id="sQual"><option value="low">Экономное</option><option value="med" selected>Среднее</option><option value="high">Высокое</option></select></div>
     <div class="row"><label for="sAuto">Авторазрешение при просадках</label><input type="checkbox" id="sAuto" checked></div>
     <div class="row"><label for="sBob">Покачивание камеры</label><input type="checkbox" id="sBob" checked></div>
@@ -212,7 +249,7 @@ kbd{display:inline-block;min-width:24px;padding:1px 7px;margin:0 2px;border:1px 
 </div>
 
 <div id="touch" class="screen"><div class="stamp">ПРОПУСК НЕ ДЕЙСТВИТЕЛЕН</div><h1 style="font-size:34px;margin:0 0 14px">Нужен компьютер</h1><p>Уважаемый посетитель! Кабинет № 13 оборудован клавиатурой и мышью образца 1974 года. Сенсорные экраны в НИИ пока не завезли — заявка подана, ждём, когда рак на горе свистнет. Пожалуйста, зайдите с компьютера.</p></div>
-<img id="handIcon" alt=""><div id="fade"></div>
+<img id="handIcon" alt=""><div id="rotTip">Поверните телефон горизонтально — так просторнее</div><div id="fade"></div>
 <div id="err"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -741,7 +778,7 @@ function initRenderer(){
   renderer.setClearColor(0x04050a,1);
   MAXANISO=Math.min(8,renderer.capabilities.getMaxAnisotropy());
   const cap=renderer.capabilities,ex=renderer.extensions;
-  GFX.hdr=cap.isWebGL2?!!ex.get('EXT_color_buffer_float'):(!!ex.get('OES_texture_half_float')&&!!ex.get('EXT_color_buffer_half_float')&&!!ex.get('OES_texture_half_float_linear'));
+  GFX.hdr=cap.isWebGL2?(!!ex.get('EXT_color_buffer_float')||!!ex.get('EXT_color_buffer_half_float')):(!!ex.get('OES_texture_half_float')&&!!ex.get('EXT_color_buffer_half_float')&&!!ex.get('OES_texture_half_float_linear'));
   GFX.depthTex=cap.isWebGL2||!!ex.get('WEBGL_depth_texture');
   scene=new T.Scene();world=new T.Group();scene.add(world);
   camera=new T.PerspectiveCamera(66,1,.05,90);camera.rotation.order='YXZ';scene.add(camera);
@@ -829,7 +866,7 @@ function volMat(n){if(!PM.vol[n])PM.vol[n]=SM('#define STEPS '+n+'\n'+PCOM+`unif
 function mkRT(w,h,o){o=o||{};const f=o.nearest?T.NearestFilter:T.LinearFilter;const rt=new T.WebGLRenderTarget(Math.max(2,Math.floor(w)),Math.max(2,Math.floor(h)),{minFilter:f,magFilter:f,format:T.RGBAFormat,type:o.hdr&&GFX.hdr?T.HalfFloatType:T.UnsignedByteType,depthBuffer:!!o.depth,stencilBuffer:false});rt.texture.generateMipmaps=false;return rt}
 function resizeGfx(){const q=QUAL[GFX.q],pr=Math.min(window.devicePixelRatio||1,q.pr),s=q.scale*GFX.dyn;
   const W=Math.max(160,Math.floor(window.innerWidth*pr*s)),H=Math.max(90,Math.floor(window.innerHeight*pr*s));if(GFX.rt&&W===GFX.W&&H===GFX.H&&GFX.rtQ===GFX.q)return;
-  GFX.W=W;GFX.H=H;GFX.rtQ=GFX.q;renderer.setPixelRatio(1);renderer.setSize(W,H,false);camera.aspect=window.innerWidth/Math.max(1,window.innerHeight);camera.updateProjectionMatrix();
+  GFX.W=W;GFX.H=H;GFX.rtQ=GFX.q;renderer.setPixelRatio(1);renderer.setSize(W,H,false);camera.aspect=window.innerWidth/Math.max(1,window.innerHeight);{const a=camera.aspect,t=Math.tan(33*PI/180);camera.fov=a<1.2?Math.min(100,2*Math.atan(t*1.2/a)*180/PI):a>1.9?2*Math.atan(t*1.9/a)*180/PI:66}camera.updateProjectionMatrix();
   if(GFX.rt){for(const k in GFX.rt){const r=GFX.rt[k];if(Array.isArray(r))r.forEach(x=>x.dispose());else{if(r.depthTexture)r.depthTexture.dispose();r.dispose()}}}
   const rt=GFX.rt={},hw=Math.ceil(W/2),hh=Math.ceil(H/2);rt.scene=mkRT(W,H,{hdr:true,depth:true});
   if(GFX.depthTex){rt.scene.depthTexture=new T.DepthTexture(W,H);rt.scene.depthTexture.type=renderer.capabilities.isWebGL2?T.UnsignedIntType:T.UnsignedShortType;rt.scene.depthTexture.minFilter=rt.scene.depthTexture.magFilter=T.NearestFilter}
@@ -2394,7 +2431,7 @@ function updateHover(){if(floorRing){const R=floorRing,p=R.userData.p||0;R.userD
   const look=drag.on&&drag.moved>=6,id=(!mouseIn||look)?null:pickAt(mouseNDC);
   if(showAllT>0){const all=[];for(const k in INTER){const it=INTER[k];if(!it.active||!shown(it.obj))continue;if(G.cam.mode==='closeup'?it.parent!==G.cam.cu:!!it.parent)continue;for(const m of it.meshes)all.push(m)}setHighlight(all,TEAL)}
   else if(id!==G.hover||(!id&&GFX.hl.length)||(id&&!GFX.hl.length))setHighlight(id?INTER[id].meshes:[],AMBER);
-  G.hover=id;const L=$('label');if(id){L.innerHTML=labelHTML(id);L.classList.add('on');L.style.left=mousePx.x+'px';L.style.top=mousePx.y+'px'}else L.classList.remove('on');
+  G.hover=id;const L=$('label'),hold=!id&&G.lblT>G.t&&INTER[G.lblId];if(id){L.innerHTML=labelHTML(id);L.classList.add('on');L.style.left=mousePx.x+'px';L.style.top=mousePx.y+'px'}else if(hold){L.innerHTML=labelHTML(G.lblId);L.classList.add('on');L.style.left=G.lblX+'px';L.style.top=G.lblY+'px'}else L.classList.remove('on');
   if(!id&&mouseIn&&!look&&G.cam.mode==='walk'&&!PL.path){const f=floorPoint();if(f&&!blocked(f.x,f.z)){ringAt(f.x,f.z);floorRing.userData.h=.35}}
   updateCursorUI()}
 function act(){if(G.state!=='play'||anySheet()||INS.on)return;const id=G.hover;
@@ -2426,10 +2463,23 @@ canvas.addEventListener('mouseenter',()=>mouseIn=true);canvas.addEventListener('
 canvas.addEventListener('mousedown',e=>{AU.resume();mouseIn=true;if(G.state!=='play')return;if(e.button!==0&&e.button!==2)return;drag.on=true;drag.btn=e.button;drag.moved=0;drag.x=e.clientX;drag.y=e.clientY});
 window.addEventListener('mouseup',e=>{if(!drag.on)return;const moved=drag.moved,btn=drag.btn;drag.on=false;updateCursorUI();if(G.state!=='play'||moved>=6)return;
   if(btn===2){goBack();return}if(anySheet()){closePaper();toggleJournal(false);return}act()});
-document.addEventListener('mousemove',e=>{const r=canvas.getBoundingClientRect();mousePx.x=e.clientX;mousePx.y=e.clientY;mouseNDC.set(((e.clientX-r.left)/r.width)*2-1,-((e.clientY-r.top)/r.height)*2+1);
-  const hi=$('handIcon');hi.style.left=e.clientX+'px';hi.style.top=e.clientY+'px';
-  if(G.state!=='play'||!drag.on)return;const k=.0022*G.set.sens,dx=e.clientX-drag.x,dy=e.clientY-drag.y;drag.x=e.clientX;drag.y=e.clientY;drag.moved+=Math.abs(dx)+Math.abs(dy);
-  if(INS.on){INS.ry+=dx*.012;INS.rx=clamp(INS.rx+dy*.012,-1.5,1.5);INS.idle=0}else if(G.cam.mode==='walk'&&!anySheet()&&drag.moved>=6){PL.yaw+=dx*k*1.5;PL.pitch=clamp(PL.pitch+dy*k*1.5,-1.35,1.35)}});
+function setPtr(cx,cy){const r=canvas.getBoundingClientRect();mousePx.x=cx;mousePx.y=cy;mouseNDC.set(((cx-r.left)/r.width)*2-1,-((cy-r.top)/r.height)*2+1)}
+function dragMove(cx,cy,gain){const k=.0022*G.set.sens*gain,dx=cx-drag.x,dy=cy-drag.y;drag.x=cx;drag.y=cy;drag.moved+=Math.abs(dx)+Math.abs(dy);
+  if(INS.on){INS.ry+=dx*.012;INS.rx=clamp(INS.rx+dy*.012,-1.5,1.5);INS.idle=0}else if(G.cam.mode==='walk'&&!anySheet()&&drag.moved>=6){PL.yaw+=dx*k;PL.pitch=clamp(PL.pitch+dy*k,-1.35,1.35)}}
+document.addEventListener('mousemove',e=>{setPtr(e.clientX,e.clientY);const hi=$('handIcon');hi.style.left=e.clientX+'px';hi.style.top=e.clientY+'px';if(G.state!=='play'||!drag.on)return;dragMove(e.clientX,e.clientY,1.5)});
+// --- сенсорный экран: тап — идти/действовать, вести пальцем — осматриваться ---
+function setTouchUI(){G.touch=true;document.body.classList.add('touch');
+  $('mouseTip').innerHTML='<div><span><b>Тап</b> — идти и действовать</span></div><div><span><b>Вести пальцем</b> — осматриваться</span></div><div><span><b>Лупа</b> на предмете — осмотреть</span></div>';
+  $('titleKeys').innerHTML='Вся игра — одним пальцем: <b>тап</b> — идти и действовать · <b>вести пальцем</b> — осматриваться';$('insTip').textContent='ведите пальцем — вращать';
+  $('pauseKeys').textContent='Тап — идти / действовать · вести пальцем — обзор. Предмет: тап по карману — взять в руку, тап по другому — соединить, лупа — осмотреть, повторный тап — убрать.'}
+function flashLabel(id){G.lblId=id;G.lblT=G.t+1.4;G.lblX=mousePx.x;G.lblY=mousePx.y}
+let tId=null;
+canvas.addEventListener('touchstart',e=>{if(e.cancelable)e.preventDefault();if(!G.touch)setTouchUI();AU.resume();if(G.state!=='play'||tId!==null)return;const t=e.changedTouches[0];tId=t.identifier;setPtr(t.clientX,t.clientY);drag.on=true;drag.btn=0;drag.moved=0;drag.x=t.clientX;drag.y=t.clientY},{passive:false});
+canvas.addEventListener('touchmove',e=>{if(e.cancelable)e.preventDefault();if(G.state!=='play')return;for(const t of e.changedTouches)if(t.identifier===tId)dragMove(t.clientX,t.clientY,2.4)},{passive:false});
+function touchEnd(e){if(e.cancelable)e.preventDefault();for(const t of e.changedTouches)if(t.identifier===tId){tId=null;const moved=drag.moved;drag.on=false;setPtr(t.clientX,t.clientY);
+    if(G.state==='play'&&moved<12&&e.type==='touchend'){if(anySheet()){closePaper();toggleJournal(false)}else if(!INS.on){const id=(!G.busy&&G.cam.mode!=='cut')?pickAt(mouseNDC):null;G.hover=id;act();if(id)flashLabel(id)}}}}
+canvas.addEventListener('touchend',touchEnd,{passive:false});canvas.addEventListener('touchcancel',touchEnd,{passive:false});
+$('insClose').addEventListener('click',()=>closeInspect());
 canvas.addEventListener('wheel',e=>{if(G.state!=='play')return;e.preventDefault();if(G.cam.mode==='closeup'){if(G.hover&&/^dial/.test(G.hover))turnDial(+G.hover.slice(4),e.deltaY>0?-1:1)}else if(G.cam.mode==='walk'&&!INS.on&&!anySheet()){PL.path=null;PL.pathThen=null;PL.wheel=clamp((PL.wheel||0)+(e.deltaY>0?-.6:.6),-1.8,1.8)}},{passive:false});
 $('bHint').addEventListener('click',()=>{hint()});$('bJournal').addEventListener('click',()=>{if(G.state==='play'&&!INS.on)toggleJournal()});$('bEye').addEventListener('click',()=>{if(G.state==='play'){showAllT=1.6;sfx('glow')}});$('bPause').addEventListener('click',()=>pause());$('closeHint').addEventListener('click',()=>exitCloseup());
 document.querySelectorAll('[data-close]').forEach(x=>x.addEventListener('click',()=>{closePaper();toggleJournal(false)}));
@@ -2480,7 +2530,7 @@ function loop(now){requestAnimationFrame(loop);let raw=(now-lastT)/1000;lastT=no
 
 // ---------- настройки и пауза ----------
 function saveSet(){try{localStorage.setItem('kab13',JSON.stringify({m:AU.vMusic,s:AU.vSfx,sens:G.set.sens,q:GFX.q,bob:G.set.bob,auto:GFX.auto}))}catch(e){}}
-function loadSet(){try{const o=JSON.parse(localStorage.getItem('kab13')||'null');if(o){if(typeof o.m==='number')AU.vMusic=o.m;if(typeof o.s==='number')AU.vSfx=o.s;if(typeof o.sens==='number')G.set.sens=o.sens;if(QUAL[o.q])GFX.q=o.q;G.set.bob=o.bob!==false;GFX.auto=o.auto!==false}}catch(e){}
+function loadSet(){try{const o=JSON.parse(localStorage.getItem('kab13')||'null');if(o){G.hadSet=true;if(typeof o.m==='number')AU.vMusic=o.m;if(typeof o.s==='number')AU.vSfx=o.s;if(typeof o.sens==='number')G.set.sens=o.sens;if(QUAL[o.q])GFX.q=o.q;G.set.bob=o.bob!==false;GFX.auto=o.auto!==false}}catch(e){}
   $('sMusic').value=Math.round(AU.vMusic*100);$('sSfx').value=Math.round(AU.vSfx*100);$('sSens').value=Math.round(G.set.sens*100);$('sQual').value=GFX.q;$('sBob').checked=G.set.bob;$('sAuto').checked=GFX.auto}
 $('sMusic').addEventListener('input',e=>{AU.vMusic=e.target.value/100;AU.applyVol();saveSet()});$('sSfx').addEventListener('input',e=>{AU.vSfx=e.target.value/100;AU.applyVol();saveSet()});
 $('sSens').addEventListener('input',e=>{G.set.sens=e.target.value/100;saveSet()});$('sBob').addEventListener('change',e=>{G.set.bob=e.target.checked;saveSet()});$('sAuto').addEventListener('change',e=>{GFX.auto=e.target.checked;if(!GFX.auto){GFX.dyn=1;resizeGfx()}saveSet()});
@@ -2492,9 +2542,9 @@ $('btnResume').addEventListener('click',resume);
 // ---------- загрузка, титул, старт ----------
 const setLoad=(p,joke)=>{$('loadFill').style.width=Math.round(p*100)+'%';$('loadPct').textContent=Math.round(p*100)+' %';if(joke)$('loadJoke').textContent=joke};
 async function boot(){
-  if(('ontouchstart' in window||navigator.maxTouchPoints>0)&&!window.matchMedia('(pointer:fine)').matches&&!/[?&]force/.test(location.search)){$('loading').classList.remove('on');$('touch').classList.add('on');return}
+  if(('ontouchstart' in window||navigator.maxTouchPoints>0)&&window.matchMedia('(pointer:coarse)').matches){setTouchUI();QUAL.low.pr=1.5;QUAL.low.scale=.85}
   try{initRenderer()}catch(e){$('loadJoke').textContent='Не удалось запустить WebGL. Буквализатору нужна видеокарта — хоть какая-нибудь.';console.error(e);return}
-  loadSet();const jokes=LOAD_JOKES.slice().sort(()=>Math.random()-.5);
+  loadSet();if(G.touch&&!G.hadSet){GFX.q='low';$('sQual').value='low'}const jokes=LOAD_JOKES.slice().sort(()=>Math.random()-.5);
   const TEXJOBS=[['Запекаем паркет, эмаль и штукатурку на видеокарте…',bakeAll]];const jobs=TEXJOBS.concat([['Отливаем латунь и бакелит…',buildMaterials],['Расставляем мебель и скелеты по шкафам…',buildWorld],
     ['Снимаем отражения с натуры…',()=>{resizeGfx();applyQualityLights();camera.position.set(.2,1.6,1);camera.updateMatrixWorld(true);world.updateMatrixWorld(true);captureEnv()}],
     ['Составляем опись имущества…',()=>{renderIcons()}],
